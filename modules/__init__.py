@@ -1,16 +1,17 @@
 """machconf 检测模块注册表. 新增模块: 实现 Module 子类后加入 _ORDER 与 _build_registry."""
 
 from .base import Item, Module, SshError, SshRunner, build_script, split_sections
+from .bios import BiosModule
 from .hardware import HardwareModule
 from .numa import NumaModule
 from .osconf import OsModule
 
 # 汇总表的展示顺序
-_ORDER = ["os", "numa", "hardware"]
+_ORDER = ["bios", "os", "numa", "hardware"]
 
 
 def _build_registry():
-    modules = [OsModule(), NumaModule(), HardwareModule()]
+    modules = [BiosModule(), OsModule(), NumaModule(), HardwareModule()]
     by_name = {m.name: m for m in modules}
     return by_name
 

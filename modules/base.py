@@ -62,6 +62,8 @@ def build_script(probes):
     for tag, command in probes:
         lines.append('echo "@@MCTAG:%s@@"' % tag)
         lines.append(command)
+    # 探测命令自带容错, 末尾显式 exit 0 使 ssh 返回码只反映连接/登录失败
+    lines.append("exit 0")
     return "\n".join(lines) + "\n"
 
 

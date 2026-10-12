@@ -1,0 +1,96 @@
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Size: No Module Installed
+	Type: Unknown

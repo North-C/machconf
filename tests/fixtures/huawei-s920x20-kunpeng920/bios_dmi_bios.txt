@@ -1,0 +1,4 @@
+	Vendor: Huawei Corp.
+	Version: 32.64
+	Release Date: 12/02/2025
+	BIOS Revision: 32.64

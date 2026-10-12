@@ -1,0 +1,20 @@
+sda     894.3G    0 sas    HWE62ST3960L003N disk
+sdb     894.3G    0 sas    HWE62ST3960L003N disk
+nbd0        0B    0                         disk
+nbd1        0B    0                         disk
+nbd2        0B    0                         disk
+nbd3        0B    0                         disk
+nbd4        0B    0                         disk
+nbd5        0B    0                         disk
+nbd6        0B    0                         disk
+nbd7        0B    0                         disk
+nvme0n1   2.9T    0 nvme   HWE6AP443T2M00KN disk
+nvme1n1   2.9T    0 nvme   HWE6AP443T2M00KN disk
+nbd8        0B    0                         disk
+nbd9        0B    0                         disk
+nbd10       0B    0                         disk
+nbd11       0B    0                         disk
+nbd12       0B    0                         disk
+nbd13       0B    0                         disk
+nbd14       0B    0                         disk
+nbd15       0B    0                         disk

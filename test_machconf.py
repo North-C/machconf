@@ -104,6 +104,36 @@ class HardwareTests(unittest.TestCase):
         self.assertIn("/proc/meminfo", items["内存容量"].value)
 
 
+class S920X20Tests(unittest.TestCase):
+    """第二机型: 华为 S920X20 / 鲲鹏 920 (SATA RAID1 系统盘 + NVMe 数据盘)."""
+
+    def test_bios_s920x20(self):
+        items = parse_module("bios", "huawei-s920x20-kunpeng920")
+        self.assertIn("32.64", items["BIOS 固件"].value)
+        self.assertEqual(items["整机型号"].value, "S920X20")
+        self.assertIn("Kunpeng 920 7280Z", items["CPU 型号"].value)
+        self.assertIn("320 逻辑 CPU", items["CPU 核心"].value)
+        self.assertIn("node3: CPU 240-319", items["NUMA 节点分布"].note)
+
+    def test_os_hugepage_single_node(self):
+        items = parse_module("os", "huawei-s920x20-kunpeng920")
+        self.assertIn("40000 × 2 MB = 78 GB", items["静态大页 (HugeTLB)"].value)
+        # 大页全部在 node0, 分布中不应出现其他节点
+        self.assertEqual(items["大页 NUMA 分布"].value,
+                         "node0/hugepages-2048kB=40000")
+
+    def test_hardware_raid1_system_disks(self):
+        items = parse_module("hardware", "huawei-s920x20-kunpeng920")
+        self.assertIn("16 × 64 GB = 1024 GB", items["内存容量"].value)
+        self.assertIn("4800 MT/s", items["内存频率"].value)
+        # RAID1 双系统盘: sda/sdb 均挂有 /, 均为 SATA SSD
+        for disk in ("sda", "sdb"):
+            self.assertIn("SATA/SAS SSD", items["磁盘 %s" % disk].value)
+            self.assertIn("系统盘", items["磁盘 %s" % disk].value)
+        self.assertIn("数据盘", items["磁盘 nvme0n1"].value)
+        self.assertEqual(items["数据盘汇总"].value, "1 块")
+
+
 class BiosTests(unittest.TestCase):
     def test_kunpeng_arm(self):
         items = parse_module("bios", "kunpeng950-openeuler2403sp3")

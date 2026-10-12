@@ -1,0 +1,4 @@
+sda=/boot/efi /boot /usr/local/services/cubetoolbox/cubeletmnt / 
+sdb=/usr/local/services/cubetoolbox/cubeletmnt / 
+nvme0n1=/data/nvme-vol1 /data/nvme-vol2 /data/nvme-vol3 /data/nvme-vol4 /data/nvme-vol5/docker/volumes/support_cube-sandbox-redis-data/_data /data/nvme-vol5/docker/volumes/support_cube-sandbox-mysql-data/_data /data/snapshot_pack /data/log /data/cubelet /data/cube-shim /data/nvme-vol5 
+nvme1n1=

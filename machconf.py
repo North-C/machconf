@@ -1,0 +1,151 @@
+#!/usr/bin/env python3
+"""machconf — 机器配置检测工具 (跨机型: x86 / ARM 均可, 不可用项优雅降级).
+
+用法:
+  python3 machconf.py -H 192.168.25.65                    # 全模块检测, 表格输出
+  python3 machconf.py -H 192.168.25.65 -m numa            # 单模块
+  python3 machconf.py -H 192.168.25.65,192.168.25.61      # 多台汇总
+  python3 machconf.py -H 192.168.25.65 -f json            # JSON (供程序消费)
+  python3 machconf.py -H 192.168.25.65 -f markdown        # Markdown 报告
+  python3 machconf.py -H 192.168.25.65 --set-numa 0       # 修改 numa_balancing (需root)
+  python3 machconf.py --list-modules                      # 列出可用模块
+
+模块: bios (BIOS配置/拓扑/功耗/超频), os (内核/hugepage), numa (NUMA balancing),
+      hardware (内存/磁盘). numa 的本机修改可直接用同目录 numa_balancing.sh.
+"""
+
+import argparse
+import json
+import sys
+
+from modules import MODULES, MODULE_ORDER, SshError, SshRunner, collect
+from modules.base import disp_width, pad
+
+SET_NUMA_CMD = "echo %s > /proc/sys/kernel/numa_balancing && cat /proc/sys/kernel/numa_balancing"
+
+
+def render_table(host_results):
+    """按 分组标题 + 对齐表格 渲染; host_results: [(host, [(module, items)])]."""
+    lines = []
+    for host, results in host_results:
+        lines.append("=" * 8 + " %s " % host + "=" * 24)
+        current_group = None
+        # 对齐宽度按单台机器内计算
+        all_items = [item for _, items in results for item in items]
+        key_width = max([14] + [disp_width(item.key) for item in all_items])
+        for module, items in results:
+            if not items:
+                continue
+            if module.group != current_group:
+                current_group = module.group
+                lines.append("── %s ─────" % current_group)
+            for item in items:
+                line = "  %s  %s" % (pad(item.key, key_width), item.value)
+                if item.note:
+                    line += "    # %s" % item.note
+                lines.append(line)
+        lines.append("")
+    return "\n".join(lines)
+
+
+def render_json(host_results):
+    data = {}
+    for host, results in host_results:
+        data[host] = {
+            module.name: [
+                {"key": item.key, "value": item.value, "note": item.note}
+                for item in items
+            ]
+            for module, items in results
+        }
+    return json.dumps(data, ensure_ascii=False, indent=2)
+
+
+def render_markdown(host_results):
+    lines = ["# 机器配置检测报告", ""]
+    for host, results in host_results:
+        lines += ["## %s" % host, ""]
+        current_group = None
+        for module, items in results:
+            if not items:
+                continue
+            if module.group != current_group:
+                current_group = module.group
+                lines += ["", "### %s" % current_group, "",
+                          "| 配置项 | 值 | 说明 |", "| --- | --- | --- |"]
+            for item in items:
+                note = item.note.replace("|", "\\|")
+                value = item.value.replace("|", "\\|")
+                lines.append("| %s | %s | %s |" % (item.key, value, note))
+        lines.append("")
+    return "\n".join(lines)
+
+
+RENDERERS = {"table": render_table, "json": render_json, "markdown": render_markdown}
+
+
+def set_numa(hosts, value):
+    """远端修改 numa_balancing 并回显新值."""
+    ok = True
+    for host in hosts:
+        try:
+            new = SshRunner(host).run_command(SET_NUMA_CMD % value).strip()
+            print("%s: numa_balancing -> %s" % (host, new or "(无回显)"))
+        except SshError as exc:
+            print("%s: 修改失败: %s" % (host, exc), file=sys.stderr)
+            ok = False
+    return 0 if ok else 1
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="机器配置检测工具 (BIOS/OS/NUMA/硬件), 详见 python3 machconf.py -h")
+    parser.add_argument("-H", "--hosts", help="目标机, 逗号分隔 (ssh 免密)")
+    parser.add_argument("-m", "--modules", default="all",
+                        help="模块名逗号分隔 (默认 all): %s" % ",".join(MODULE_ORDER))
+    parser.add_argument("-f", "--format", default="table", choices=list(RENDERERS),
+                        help="输出格式 (默认 table)")
+    parser.add_argument("--set-numa", metavar="0|1", choices=["0", "1"],
+                        help="修改远端 kernel.numa_balancing (root)")
+    parser.add_argument("--list-modules", action="store_true", help="列出可用模块")
+    args = parser.parse_args(argv)
+
+    if args.list_modules:
+        for name in MODULE_ORDER:
+            mod = MODULES[name]
+            print("%-10s %s (%s)" % (name, mod.title, mod.group))
+        return 0
+    if not args.hosts:
+        parser.error("需要 -H/--hosts (或 --list-modules)")
+
+    hosts = [h.strip() for h in args.hosts.split(",") if h.strip()]
+    if args.set_numa:
+        return set_numa(hosts, args.set_numa)
+
+    if args.modules == "all":
+        selected = set(MODULE_ORDER)
+    else:
+        selected = {m.strip() for m in args.modules.split(",") if m.strip()}
+        unknown = selected - set(MODULES)
+        if unknown:
+            parser.error("未知模块: %s (可选: %s)" % (",".join(sorted(unknown)),
+                                                     ",".join(MODULE_ORDER)))
+
+    host_results, failed = [], []
+    for host in hosts:
+        try:
+            host_results.append((host, collect(host, selected)))
+        except SshError as exc:
+            print("错误: %s" % exc, file=sys.stderr)
+            failed.append(host)
+    if not host_results:
+        return 1
+    print(RENDERERS[args.format](host_results))
+    if failed:
+        print("失败主机: %s" % ",".join(failed), file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

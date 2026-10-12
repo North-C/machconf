@@ -2,13 +2,14 @@
 
 from .base import Item, Module, SshError, SshRunner, build_script, split_sections
 from .numa import NumaModule
+from .osconf import OsModule
 
 # 汇总表的展示顺序
-_ORDER = ["numa"]
+_ORDER = ["os", "numa"]
 
 
 def _build_registry():
-    modules = [NumaModule()]
+    modules = [OsModule(), NumaModule()]
     by_name = {m.name: m for m in modules}
     return by_name
 

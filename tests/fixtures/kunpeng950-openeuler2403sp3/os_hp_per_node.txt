@@ -1,0 +1,16 @@
+node0/hugepages-1048576kB=0
+node0/hugepages-2048kB=30000
+node0/hugepages-32768kB=0
+node0/hugepages-64kB=0
+node1/hugepages-1048576kB=0
+node1/hugepages-2048kB=30000
+node1/hugepages-32768kB=0
+node1/hugepages-64kB=0
+node2/hugepages-1048576kB=0
+node2/hugepages-2048kB=49152
+node2/hugepages-32768kB=0
+node2/hugepages-64kB=0
+node3/hugepages-1048576kB=0
+node3/hugepages-2048kB=49168
+node3/hugepages-32768kB=0
+node3/hugepages-64kB=0

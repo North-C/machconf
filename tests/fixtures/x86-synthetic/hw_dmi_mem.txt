@@ -1,0 +1,8 @@
+	Size: 16 GB
+	Type: DDR4
+	Speed: 3200 MT/s
+	Configured Memory Speed: 2933 MT/s
+	Size: 16 GB
+	Type: DDR4
+	Speed: 3200 MT/s
+	Configured Memory Speed: 2933 MT/s

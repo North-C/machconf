@@ -1,0 +1,4 @@
+nvme1n1=
+nvme2n1=/data/cubelet 
+nvme0n1=/boot/efi /boot /usr/local/services/cubetoolbox/cubeletmnt / /var/lib/kubelet/pods/4b0d9c42-5c66-408c-a2c5-89c8715b4f6e/volume-subpaths/prometheus-k8s-db-0/prometheus/2 /var/lib/kubelet/pods/55a596f3-5102-4d7e-85ef-a14c31076a85/volume-subpaths/prometheus-k8s-db-1/prometheus/2 /var/lib/kubelet/pods/55a596f3-5102-4d7e-85ef-a14c31076a85/volumes/kubernetes.io~local-volume/prometheus-k8s-db-1 /var/lib/kubelet/pods/4b0d9c42-5c66-408c-a2c5-89c8715b4f6e/volumes/kubernetes.io~local-volume/prometheus-k8s-db-0 /home 
+nvme3n1=

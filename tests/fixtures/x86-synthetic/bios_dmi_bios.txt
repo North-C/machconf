@@ -1,0 +1,4 @@
+	Vendor: Dell Inc.
+	Version: 2.11.4
+	Release Date: 08/14/2024
+	BIOS Revision: 2.11

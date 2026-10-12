@@ -1,0 +1,4 @@
+	Vendor: Huawei Corp.
+	Version: 13.22.00.32
+	Release Date: 12/09/2025
+	BIOS Revision: 13.22

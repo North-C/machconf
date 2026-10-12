@@ -1,0 +1,3 @@
+HugePages_Total:   158320
+HugePages_Free:    60008
+Hugepagesize:       2048 kB

@@ -1,0 +1,3 @@
+sda=/ [SWAP]
+sdb=/data
+nvme0n1=

@@ -48,7 +48,7 @@ class OsModule(Module):
         total = first_group(r"HugePages_Total:\s+(\d+)", meminfo)
         free = first_group(r"HugePages_Free:\s+(\d+)", meminfo)
         size_kb = first_group(r"Hugepagesize:\s+(\d+)", meminfo)
-        if total and size_kb:
+        if total and size_kb and int(total) > 0:
             total_kb = int(total) * int(size_kb)
             free_kb = int(free) * int(size_kb) if free else 0
             items.append(Item(

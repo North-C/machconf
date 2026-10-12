@@ -1,0 +1,70 @@
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 5200 MT/s
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 5200 MT/s
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 5200 MT/s
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 5200 MT/s
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 5200 MT/s
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 5200 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: No Module Installed
+	Type: Unknown
+	Size: No Module Installed
+	Type: Unknown
+	Size: No Module Installed
+	Type: Unknown
+	Size: No Module Installed
+	Type: Unknown
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 5200 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 5200 MT/s
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 5200 MT/s
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 5200 MT/s
+	Size: 64 GB
+	Type: DDR5
+	Speed: 5600 MT/s
+	Configured Memory Speed: 5200 MT/s
+	Size: No Module Installed
+	Type: Unknown
+	Size: No Module Installed
+	Type: Unknown
+	Size: No Module Installed
+	Type: Unknown
+	Size: No Module Installed
+	Type: Unknown
+	Size: No Module Installed
+	Type: Unknown
+	Size: No Module Installed
+	Type: Unknown

@@ -1,0 +1,3 @@
+sda  931.5G 1 sata  PERC H755 Front RAID5 disk
+sdb  894G 0 sata SAMSUNG MZ7L9609 disk
+nvme0n1 3.5T 0 nvme Dell Ent NVMe P5600 disk

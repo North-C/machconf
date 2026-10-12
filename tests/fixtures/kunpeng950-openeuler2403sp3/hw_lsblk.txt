@@ -1,0 +1,20 @@
+nbd0       0B    0                         disk
+nbd1       0B    0                         disk
+nbd2       0B    0                         disk
+nbd3       0B    0                         disk
+nbd4       0B    0                         disk
+nbd5       0B    0                         disk
+nbd6       0B    0                         disk
+nbd7       0B    0                         disk
+nbd8       0B    0                         disk
+nbd9       0B    0                         disk
+nbd10      0B    0                         disk
+nbd11      0B    0                         disk
+nbd12      0B    0                         disk
+nbd13      0B    0                         disk
+nbd14      0B    0                         disk
+nbd15      0B    0                         disk
+nvme1n1  2.9T    0 nvme   HWE62P443T2M00GN disk
+nvme2n1  1.7T    0 nvme   HWE62P441T9L005N disk
+nvme0n1  2.9T    0 nvme   HWE6AP443T2M00KN disk
+nvme3n1  3.5T    0 nvme   HWE72P453T8L005N disk

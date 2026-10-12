@@ -1,0 +1,2 @@
+	Manufacturer: Huawei
+	Product Name: Not Specified

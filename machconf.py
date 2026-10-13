@@ -8,6 +8,8 @@
   python3 machconf.py -H 192.168.25.65,192.168.25.61      # 多台汇总
   python3 machconf.py -H 192.168.25.65 -f json            # JSON (供程序消费)
   python3 machconf.py -H 192.168.25.65 -f markdown        # Markdown 报告
+  python3 machconf.py -H 192.168.25.65 -f csv             # CSV 长表 (Excel/pandas)
+  python3 machconf.py -H 192.168.25.65,192.168.25.61 -f csv-wide   # CSV 宽表 (多机对比)
   python3 machconf.py -H 192.168.25.65 --set-numa 0       # 修改 numa_balancing (需root)
   python3 machconf.py --list-modules                      # 列出可用模块
 
@@ -16,6 +18,8 @@
 """
 
 import argparse
+import csv
+import io
 import json
 import socket
 import sys
@@ -88,7 +92,39 @@ def render_markdown(host_results):
     return "\n".join(lines)
 
 
-RENDERERS = {"table": render_table, "json": render_json, "markdown": render_markdown}
+def render_csv(host_results):
+    """长表 CSV: 每行一个配置项 (主机,模块,配置项,值,说明), 适合表格软件/pandas.
+
+    首字符写入 UTF-8 BOM, 保证 Excel 直接打开中文不乱码.
+    """
+    buf = io.StringIO()
+    writer = csv.writer(buf)
+    writer.writerow(["主机", "模块", "配置项", "值", "说明"])
+    for host, results in host_results:
+        for module, items in results:
+            for item in items:
+                writer.writerow([host, module.title, item.key, item.value, item.note])
+    return "\ufeff" + buf.getvalue()
+
+
+def render_csv_wide(host_results):
+    """宽表 CSV: 一行一个配置项, 每台主机一列, 便于多机对比; 配置项按首次出现排序."""
+    by_key = {}  # key -> {host: value}, dict 保序
+    for host, results in host_results:
+        for module, items in results:
+            for item in items:
+                by_key.setdefault(item.key, {})[host] = item.value
+    hosts = [host for host, _ in host_results]
+    buf = io.StringIO()
+    writer = csv.writer(buf)
+    writer.writerow(["配置项"] + hosts)
+    for key, values in by_key.items():
+        writer.writerow([key] + [values.get(host, "") for host in hosts])
+    return "\ufeff" + buf.getvalue()
+
+
+RENDERERS = {"table": render_table, "json": render_json, "markdown": render_markdown,
+             "csv": render_csv, "csv-wide": render_csv_wide}
 
 
 def set_numa(hosts, value, ask_pass=False):

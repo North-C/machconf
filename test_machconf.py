@@ -257,5 +257,44 @@ class RenderTests(unittest.TestCase):
         self.assertIn("值|带竖线", table)
 
 
+class CsvRenderTests(unittest.TestCase):
+    def _results(self):
+        from modules.base import Item
+        numa = MODULES["numa"]
+        hw = MODULES["hardware"]
+        return [
+            ("host-a", [(numa, [Item("numa_balancing 开关", "1 (自动迁移)")]),
+                        (hw, [Item("内存容量", "11 × 64 GB, 共 704 GB")])]),
+            ("host-b", [(numa, [Item("numa_balancing 开关", "0 (不做迁移)")]),
+                        (hw, [Item("数据盘汇总", "2 块")])]),
+        ]
+
+    def test_csv_long_has_bom_and_quoting(self):
+        import csv as csv_mod
+        import io
+        text = machconf.render_csv(self._results())
+        self.assertTrue(text.startswith("\ufeff"))  # UTF-8 BOM, Excel 中文兼容
+        rows = list(csv_mod.reader(io.StringIO(text.lstrip("\ufeff"))))
+        self.assertEqual(rows[0], ["主机", "模块", "配置项", "值", "说明"])
+        self.assertEqual(rows[1][0], "host-a")
+        self.assertEqual(rows[1][2], "numa_balancing 开关")
+        # 含逗号的值应被正确引用成单字段
+        mem_row = [r for r in rows if r[2] == "内存容量"][0]
+        self.assertEqual(mem_row[3], "11 × 64 GB, 共 704 GB")
+        self.assertEqual(len(rows), 1 + 4)
+
+    def test_csv_wide_aligns_hosts(self):
+        import csv as csv_mod
+        import io
+        text = machconf.render_csv_wide(self._results())
+        rows = list(csv_mod.reader(io.StringIO(text.lstrip("\ufeff"))))
+        self.assertEqual(rows[0], ["配置项", "host-a", "host-b"])
+        by_key = {r[0]: r[1:] for r in rows[1:]}
+        self.assertEqual(by_key["numa_balancing 开关"], ["1 (自动迁移)", "0 (不做迁移)"])
+        # 仅单台有的配置项, 另一台为空
+        self.assertEqual(by_key["内存容量"], ["11 × 64 GB, 共 704 GB", ""])
+        self.assertEqual(by_key["数据盘汇总"], ["", "2 块"])
+
+
 if __name__ == "__main__":
     unittest.main()

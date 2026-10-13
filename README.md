@@ -30,8 +30,10 @@ python3 machconf.py -H 192.0.2.10 -m numa
 # 多台汇总
 python3 machconf.py -H 192.0.2.10,192.0.2.11
 
-# 输出格式: table (默认) / json / markdown
+# 输出格式: table (默认) / json / markdown / csv / csv-wide
 python3 machconf.py -H 192.0.2.10 -f markdown > report.md
+python3 machconf.py -H 192.0.2.10 -f csv > report.csv           # CSV 长表 (Excel/pandas)
+python3 machconf.py -H 192.0.2.10,192.0.2.11 -f csv-wide > compare.csv  # 宽表多机对比
 
 # 修改 numa_balancing (立即生效, 回读验证; 重启后恢复)
 sudo python3 machconf.py --local --set-numa 0
@@ -46,6 +48,10 @@ python3 machconf.py -H 192.0.2.10 --set-numa 0
 | `os` | 发行版/内核版本、静态大页 (容量/空闲/各 NUMA 节点分布)、透明大页 THP | /proc/meminfo, /sys/devices/system/node |
 | `numa` | `kernel.numa_balancing` 运行时开关、内核启动参数覆盖、sysctl 持久化配置 | /proc/sys, /proc/cmdline, sysctl.conf |
 | `hardware` | 内存容量/类型/频率 (实配与标称)、磁盘大小/类型 (NVMe/SSD/HDD)/角色 (系统盘/数据盘/未挂载) | dmidecode, lsblk |
+
+输出格式: `table` 终端对齐表格; `json` 结构化; `markdown` 报告; `csv` 长表
+(主机/模块/配置项/值/说明, 一行一项, 带 UTF-8 BOM 可直接用 Excel 打开);
+`csv-wide` 宽表 (一行一个配置项、每台主机一列, 适合多机配置差异对比)。
 
 说明:
 

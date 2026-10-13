@@ -2,7 +2,8 @@
 """machconf — 机器配置检测工具 (跨机型: x86 / ARM 均可, 不可用项优雅降级).
 
 用法:
-  python3 machconf.py -H 192.168.25.65                    # 全模块检测, 表格输出
+  python3 machconf.py -H 192.168.25.65                    # 远程全模块检测, 表格输出
+  python3 machconf.py --local                             # 本机检测, 无需 SSH (root 可得全量)
   python3 machconf.py -H 192.168.25.65 -m numa            # 单模块
   python3 machconf.py -H 192.168.25.65,192.168.25.61      # 多台汇总
   python3 machconf.py -H 192.168.25.65 -f json            # JSON (供程序消费)
@@ -16,12 +17,18 @@
 
 import argparse
 import json
+import socket
 import sys
 
-from modules import MODULES, MODULE_ORDER, SshError, SshRunner, collect
+from modules import LOCAL, MODULES, MODULE_ORDER, SshError, make_runner, collect
 from modules.base import disp_width, pad
 
 SET_NUMA_CMD = "echo %s > /proc/sys/kernel/numa_balancing && cat /proc/sys/kernel/numa_balancing"
+
+
+def display_host(host):
+    """输出中展示的主机名: 本机模式用真实主机名."""
+    return socket.gethostname() if host == LOCAL else host
 
 
 def render_table(host_results):
@@ -85,14 +92,14 @@ RENDERERS = {"table": render_table, "json": render_json, "markdown": render_mark
 
 
 def set_numa(hosts, value):
-    """远端修改 numa_balancing 并回显新值."""
+    """修改 numa_balancing (远端 SSH 或本机) 并回显新值."""
     ok = True
     for host in hosts:
         try:
-            new = SshRunner(host).run_command(SET_NUMA_CMD % value).strip()
-            print("%s: numa_balancing -> %s" % (host, new or "(无回显)"))
+            new = make_runner(host).run_command(SET_NUMA_CMD % value).strip()
+            print("%s: numa_balancing -> %s" % (display_host(host), new or "(无回显)"))
         except SshError as exc:
-            print("%s: 修改失败: %s" % (host, exc), file=sys.stderr)
+            print("%s: 修改失败: %s" % (display_host(host), exc), file=sys.stderr)
             ok = False
     return 0 if ok else 1
 
@@ -100,13 +107,15 @@ def set_numa(hosts, value):
 def main(argv=None):
     parser = argparse.ArgumentParser(
         description="机器配置检测工具 (BIOS/OS/NUMA/硬件), 详见 python3 machconf.py -h")
-    parser.add_argument("-H", "--hosts", help="目标机, 逗号分隔 (ssh 免密)")
+    parser.add_argument("-H", "--hosts", help="远程目标机, 逗号分隔 (ssh 免密)")
+    parser.add_argument("--local", action="store_true",
+                        help="检测本机 (无需 SSH; BIOS/内存等完整信息需 root)")
     parser.add_argument("-m", "--modules", default="all",
                         help="模块名逗号分隔 (默认 all): %s" % ",".join(MODULE_ORDER))
     parser.add_argument("-f", "--format", default="table", choices=list(RENDERERS),
                         help="输出格式 (默认 table)")
     parser.add_argument("--set-numa", metavar="0|1", choices=["0", "1"],
-                        help="修改远端 kernel.numa_balancing (root)")
+                        help="修改 kernel.numa_balancing (root)")
     parser.add_argument("--list-modules", action="store_true", help="列出可用模块")
     args = parser.parse_args(argv)
 
@@ -115,10 +124,13 @@ def main(argv=None):
             mod = MODULES[name]
             print("%-10s %s (%s)" % (name, mod.title, mod.group))
         return 0
-    if not args.hosts:
-        parser.error("需要 -H/--hosts (或 --list-modules)")
+    if args.local and args.hosts:
+        parser.error("--local 与 -H/--hosts 互斥")
+    if not args.local and not args.hosts:
+        parser.error("需要 --local 或 -H/--hosts (或 --list-modules)")
 
-    hosts = [h.strip() for h in args.hosts.split(",") if h.strip()]
+    hosts = [LOCAL] if args.local else \
+        [h.strip() for h in args.hosts.split(",") if h.strip()]
     if args.set_numa:
         return set_numa(hosts, args.set_numa)
 
@@ -134,10 +146,10 @@ def main(argv=None):
     host_results, failed = [], []
     for host in hosts:
         try:
-            host_results.append((host, collect(host, selected)))
+            host_results.append((display_host(host), collect(host, selected)))
         except SshError as exc:
             print("错误: %s" % exc, file=sys.stderr)
-            failed.append(host)
+            failed.append(display_host(host))
     if not host_results:
         return 1
     print(RENDERERS[args.format](host_results))

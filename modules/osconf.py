@@ -1,5 +1,7 @@
 """OS 配置检测: 内核版本/发行版、静态大页(含各 NUMA 节点分布)、透明大页 THP."""
 
+import re
+
 from .base import Item, Module, first_group
 
 
@@ -59,9 +61,10 @@ class OsModule(Module):
         else:
             items.append(Item("静态大页 (HugeTLB)", "未配置"))
 
+        # 只接受严格匹配的行, 过滤 glob 未展开的字面量 (如无 /sys 的平台) 与 0 值
         per_node = [line.strip() for line in
                     sections.get("os_hp_per_node", "").splitlines()
-                    if line.strip() and not line.strip().endswith("=0")]
+                    if re.match(r"^node\d+/hugepages-\d+kB=[1-9]\d*$", line.strip())]
         if per_node:
             items.append(Item("大页 NUMA 分布", "; ".join(per_node)))
         elif total and int(total) > 0:

@@ -37,6 +37,44 @@ class BaseTests(unittest.TestCase):
         self.assertEqual(split_sections("banner\n@@MCTAG:a@@\n1"), {"a": "1"})
 
 
+class LocalRunnerTests(unittest.TestCase):
+    def test_run_script_local(self):
+        from modules.base import LocalRunner, build_script, split_sections
+        runner = LocalRunner()
+        out = runner.run_script(build_script([("a", "echo hello"), ("b", "printf x")]))
+        self.assertEqual(split_sections(out), {"a": "hello", "b": "x"})
+
+    def test_run_command_failure_raises(self):
+        from modules.base import LocalRunner, RunnerError
+        with self.assertRaises(RunnerError):
+            LocalRunner().run_command("exit 3")
+
+    def test_make_runner_dispatch(self):
+        from modules import LOCAL, make_runner
+        from modules.base import LocalRunner, SshRunner
+        self.assertIsInstance(make_runner(LOCAL), LocalRunner)
+        self.assertIsInstance(make_runner("192.0.2.10"), SshRunner)
+
+
+class CliLocalTests(unittest.TestCase):
+    def test_local_and_hosts_mutually_exclusive(self):
+        with self.assertRaises(SystemExit):
+            machconf.main(["--local", "-H", "192.0.2.10"])
+
+    def test_local_json_smoke(self):
+        """--local 在本机真实执行, 断言结构而非具体值 (跨平台)."""
+        import io
+        from contextlib import redirect_stdout
+        buf = io.StringIO()
+        with redirect_stdout(buf):
+            rc = machconf.main(["--local", "-m", "numa", "-f", "json"])
+        self.assertEqual(rc, 0)
+        data = json.loads(buf.getvalue())
+        (host, modules), = data.items()
+        self.assertTrue(host)
+        self.assertIn("numa", modules)
+
+
 class NumaTests(unittest.TestCase):
     def test_kunpeng_enabled(self):
         items = parse_module("numa", "kunpeng950-openeuler2403sp3")

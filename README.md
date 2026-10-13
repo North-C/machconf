@@ -6,18 +6,21 @@ JSON 或 Markdown 报告。面向性能测试前的机器基线核对 (NUMA 拓�
 
 ## 前置条件
 
-- 检测机 (本机): Python ≥ 3.8, 仅标准库
-- 目标机: `ssh root@<host>` 免密可登录 (BIOS/内存信息需要 root 读 dmidecode)
+- Python ≥ 3.8, 仅标准库
+- 远程模式: 目标机 `ssh root@<host>` 免密可登录
+- 本机模式 (`--local`): 无需 SSH; BIOS/内存等完整信息仍需 root (sudo) 运行
 
 ## 快速开始
 
 ```bash
-cd tools/machconf
+# 本机检测, 无需 SSH
+sudo python3 machconf.py --local
 
-# 全模块检测, 表格输出
+# 远程全模块检测, 表格输出
 python3 machconf.py -H 192.0.2.10
 
 # 单模块 (bios / os / numa / hardware)
+python3 machconf.py --local -m numa
 python3 machconf.py -H 192.0.2.10 -m numa
 
 # 多台汇总
@@ -26,7 +29,8 @@ python3 machconf.py -H 192.0.2.10,192.0.2.11
 # 输出格式: table (默认) / json / markdown
 python3 machconf.py -H 192.0.2.10 -f markdown > report.md
 
-# 远程修改 numa_balancing (立即生效, 回读验证; 重启后恢复)
+# 修改 numa_balancing (立即生效, 回读验证; 重启后恢复)
+sudo python3 machconf.py --local --set-numa 0
 python3 machconf.py -H 192.0.2.10 --set-numa 0
 ```
 
@@ -47,6 +51,12 @@ python3 machconf.py -H 192.0.2.10 --set-numa 0
   推断 (标注"推断")。
 - 磁盘角色按挂载点判别, 逐盘 `lsblk` 聚合含 LVM 子设备的挂载点, 系统盘 = 挂载了
   `/`、`/boot` 或 swap 的盘, 其余已挂载盘为数据盘。
+
+## 本机模式与远程模式
+
+两种模式走同一套模块与探测命令 (`bash -s`): 远程模式经 `ssh root@<host>` 执行,
+本机模式 (`--local`) 直接在本机执行, 输出与远程模式一致 (表头为本机真实主机名)。
+非 root 本机运行时, dmidecode 等需要特权的探测会优雅降级为 `N.A.` 并给出原因。
 
 ## numa_balancing.sh
 

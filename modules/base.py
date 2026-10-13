@@ -5,46 +5,85 @@ import subprocess
 import unicodedata
 
 
-class SshError(RuntimeError):
-    """SSH 连接或执行失败."""
+class RunnerError(RuntimeError):
+    """探测执行失败 (SSH 连接失败 / 本地命令失败 / 超时)."""
 
 
-class SshRunner:
-    """通过 `ssh user@host bash -s` 在远端执行探测脚本, 复用免密登录配置."""
+# 兼容别名: 早期版本只有 SSH 执行器
+SshError = RunnerError
 
-    def __init__(self, host, user="root", connect_timeout=5, command_timeout=30):
-        self.host = host
-        self.user = user
-        self.connect_timeout = connect_timeout
+
+class Runner:
+    """探测脚本执行器基类: 以 `bash -s` 方式运行脚本, 子类只提供启动方式."""
+
+    def __init__(self, command_timeout=30):
         self.command_timeout = command_timeout
+        self.timeout = command_timeout
+
+    @property
+    def label(self):
+        """错误信息中的目标标识 (如 root@host / local)."""
+        raise NotImplementedError
+
+    def _argv(self):
+        raise NotImplementedError
 
     def run_script(self, script):
-        argv = [
-            "ssh",
-            "-o", "BatchMode=yes",
-            "-o", "StrictHostKeyChecking=accept-new",
-            "-o", "ConnectTimeout=%d" % self.connect_timeout,
-            "%s@%s" % (self.user, self.host),
-            "bash -s",
-        ]
         try:
             proc = subprocess.run(
-                argv, input=script, capture_output=True, text=True,
-                timeout=self.connect_timeout + self.command_timeout,
+                self._argv(), input=script, capture_output=True, text=True,
+                timeout=self.timeout,
             )
         except FileNotFoundError:
-            raise SshError("未找到 ssh 命令")
+            raise RunnerError("%s: 未找到执行命令 (%s)" % (self.label, self._argv()[0]))
         except subprocess.TimeoutExpired:
-            raise SshError("%s: 命令执行超时 (> %ds)" % (self.host, self.command_timeout))
+            raise RunnerError("%s: 命令执行超时 (> %ds)"
+                              % (self.label, self.command_timeout))
         if proc.returncode != 0:
-            raise SshError("%s: ssh 失败 (rc=%d): %s"
-                           % (self.host, proc.returncode, proc.stderr.strip()[:200]))
+            raise RunnerError("%s: 执行失败 (rc=%d): %s"
+                              % (self.label, proc.returncode, proc.stderr.strip()[:200]))
         return proc.stdout
 
     def run_command(self, command):
         """执行单条命令, 返回 stdout; 用于写操作(如修改配置)."""
         script = "set -e\n%s\n" % command
         return self.run_script(script)
+
+
+class SshRunner(Runner):
+    """远端执行: `ssh user@host bash -s`, 复用免密登录配置."""
+
+    def __init__(self, host, user="root", connect_timeout=5, command_timeout=30):
+        super().__init__(command_timeout)
+        self.host = host
+        self.user = user
+        self.connect_timeout = connect_timeout
+        self.timeout = connect_timeout + command_timeout
+
+    @property
+    def label(self):
+        return "%s@%s" % (self.user, self.host)
+
+    def _argv(self):
+        return [
+            "ssh",
+            "-o", "BatchMode=yes",
+            "-o", "StrictHostKeyChecking=accept-new",
+            "-o", "ConnectTimeout=%d" % self.connect_timeout,
+            self.label,
+            "bash -s",
+        ]
+
+
+class LocalRunner(Runner):
+    """本机执行: 直接 `bash -s`, 无需 SSH; BIOS/内存等完整信息仍需 root."""
+
+    @property
+    def label(self):
+        return "local"
+
+    def _argv(self):
+        return ["bash", "-s"]
 
 
 # ---------- 探测脚本组装与解析 ----------

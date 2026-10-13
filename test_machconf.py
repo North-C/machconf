@@ -225,6 +225,14 @@ class BiosTests(unittest.TestCase):
         self.assertIn("2 路 × 26 核", items["CPU 核心"].value)
         self.assertIn("node1: CPU 26-51,78-103", items["NUMA 节点分布"].note)
 
+    def test_junk_vendor_stripped_from_firmware(self):
+        from modules.bios import parse_bios_firmware
+        dmi = ("\tVendor: To be filled by O.E.M.\n\tVersion: 10.79\n"
+               "\tRelease Date: 02/10/2026\n")
+        items = {i.key: i for i in parse_bios_firmware(dmi, "")}
+        self.assertEqual(items["BIOS 固件"].value, "10.79")
+        self.assertEqual(items["BIOS 固件"].note, "发布日期 02/10/2026")
+
 
 class RenderTests(unittest.TestCase):
     def _fake_results(self):

@@ -24,8 +24,8 @@ def _clean(text):
 def parse_bios_firmware(dmi_bios, dmi_system):
     """BIOS 固件与整机信息."""
     items = []
-    vendor = first_group(r"^\s*Vendor:\s+(.+)$", dmi_bios, re.M)
-    version = first_group(r"^\s*Version:\s+(.+)$", dmi_bios, re.M)
+    vendor = _clean(first_group(r"^\s*Vendor:\s+(.+)$", dmi_bios, re.M))
+    version = _clean(first_group(r"^\s*Version:\s+(.+)$", dmi_bios, re.M))
     date = first_group(r"^\s*Release Date:\s+(.+)$", dmi_bios, re.M)
     bios_rev = first_group(r"^\s*BIOS Revision:\s+(.+)$", dmi_bios, re.M)
     if vendor or version:

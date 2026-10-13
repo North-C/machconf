@@ -51,28 +51,49 @@ class Runner:
 
 
 class SshRunner(Runner):
-    """远端执行: `ssh user@host bash -s`, 复用免密登录配置."""
+    """远端执行: `ssh user@host bash -s`.
 
-    def __init__(self, host, user="root", connect_timeout=5, command_timeout=30):
+    默认 BatchMode (仅免密, 失败立即报错, 适合脚本);
+    ask_pass=True 时去掉 BatchMode, 由 ssh 在终端 (/dev/tty) 交互提示输入密码,
+    密码不经过本工具; 同时启用 ControlMaster 连接复用, 同一主机多次执行只输一次.
+    """
+
+    # ask_pass 模式的连接复用参数 (OpenSSH >= 6.3 支持 %C)
+    _CONTROL_OPTS = [
+        "-o", "ControlMaster=auto",
+        "-o", "ControlPath=~/.ssh/machconf-%C",
+        "-o", "ControlPersist=1m",
+    ]
+    # ask_pass 模式为交互输密码预留的超时余量
+    _PASSWORD_GRACE = 150
+
+    def __init__(self, host, user="root", connect_timeout=5, command_timeout=30,
+                 ask_pass=False):
         super().__init__(command_timeout)
         self.host = host
         self.user = user
         self.connect_timeout = connect_timeout
+        self.ask_pass = ask_pass
         self.timeout = connect_timeout + command_timeout
+        if ask_pass:
+            self.timeout += self._PASSWORD_GRACE
 
     @property
     def label(self):
         return "%s@%s" % (self.user, self.host)
 
     def _argv(self):
-        return [
-            "ssh",
-            "-o", "BatchMode=yes",
+        argv = ["ssh"]
+        if not self.ask_pass:
+            argv += ["-o", "BatchMode=yes"]
+        argv += [
             "-o", "StrictHostKeyChecking=accept-new",
             "-o", "ConnectTimeout=%d" % self.connect_timeout,
-            self.label,
-            "bash -s",
         ]
+        if self.ask_pass:
+            argv += self._CONTROL_OPTS
+        argv += [self.label, "bash -s"]
+        return argv
 
 
 class LocalRunner(Runner):

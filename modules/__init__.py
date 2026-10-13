@@ -33,17 +33,17 @@ MODULE_ORDER = [name for name in _ORDER if name in MODULES] \
     + [name for name in MODULES if name not in _ORDER]
 
 
-def make_runner(host, **kwargs):
-    """按 host 选择执行器: 'local' 走本机 bash, 其余走 SSH."""
+def make_runner(host, ask_pass=False, **kwargs):
+    """按 host 选择执行器: 'local' 走本机 bash, 其余走 SSH (ask_pass 见 SshRunner)."""
     if host == LOCAL:
         return LocalRunner(**kwargs)
-    return SshRunner(host, **kwargs)
+    return SshRunner(host, ask_pass=ask_pass, **kwargs)
 
 
-def collect(host, module_names, runner=None):
+def collect(host, module_names, runner=None, ask_pass=False):
     """在 host ('local' 或远程地址) 上执行指定模块的探测并解析,
     返回 [(module, [Item])], 顺序按 MODULE_ORDER."""
-    runner = runner or make_runner(host)
+    runner = runner or make_runner(host, ask_pass=ask_pass)
     mods = [MODULES[name] for name in MODULE_ORDER if name in module_names]
     probes = []
     for mod in mods:

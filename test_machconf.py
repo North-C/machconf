@@ -75,6 +75,35 @@ class CliLocalTests(unittest.TestCase):
         self.assertIn("numa", modules)
 
 
+class SshAskPassTests(unittest.TestCase):
+    def test_default_argv_is_batch(self):
+        from modules.base import SshRunner
+        argv = SshRunner("h1")._argv()
+        self.assertIn("BatchMode=yes", argv)
+        self.assertNotIn("ControlMaster=auto", argv)
+        self.assertEqual(argv[-2:], ["root@h1", "bash -s"])
+        # BatchMode 下超时不含输密码余量
+        self.assertEqual(SshRunner("h1").timeout,
+                         SshRunner("h1").connect_timeout + SshRunner("h1").command_timeout)
+
+    def test_ask_pass_argv(self):
+        from modules.base import SshRunner
+        argv = SshRunner("h2", ask_pass=True)._argv()
+        self.assertNotIn("BatchMode=yes", argv)
+        for opt in ("ControlMaster=auto", "ControlPath=~/.ssh/machconf-%C",
+                    "ControlPersist=1m"):
+            self.assertIn(opt, argv)
+        self.assertEqual(argv[-2:], ["root@h2", "bash -s"])
+        # ask_pass 下超时为输密码留出余量
+        runner = SshRunner("h2", ask_pass=True)
+        self.assertEqual(runner.timeout, runner.connect_timeout + runner.command_timeout
+                         + runner._PASSWORD_GRACE)
+
+    def test_ask_pass_rejected_with_local(self):
+        with self.assertRaises(SystemExit):
+            machconf.main(["--local", "--ask-pass"])
+
+
 class NumaTests(unittest.TestCase):
     def test_kunpeng_enabled(self):
         items = parse_module("numa", "kunpeng950-openeuler2403sp3")

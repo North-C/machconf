@@ -91,12 +91,13 @@ def render_markdown(host_results):
 RENDERERS = {"table": render_table, "json": render_json, "markdown": render_markdown}
 
 
-def set_numa(hosts, value):
+def set_numa(hosts, value, ask_pass=False):
     """修改 numa_balancing (远端 SSH 或本机) 并回显新值."""
     ok = True
     for host in hosts:
         try:
-            new = make_runner(host).run_command(SET_NUMA_CMD % value).strip()
+            new = make_runner(host, ask_pass=ask_pass).run_command(
+                SET_NUMA_CMD % value).strip()
             print("%s: numa_balancing -> %s" % (display_host(host), new or "(无回显)"))
         except SshError as exc:
             print("%s: 修改失败: %s" % (display_host(host), exc), file=sys.stderr)
@@ -108,6 +109,9 @@ def main(argv=None):
     parser = argparse.ArgumentParser(
         description="机器配置检测工具 (BIOS/OS/NUMA/硬件), 详见 python3 machconf.py -h")
     parser.add_argument("-H", "--hosts", help="远程目标机, 逗号分隔 (ssh 免密)")
+    parser.add_argument("--ask-pass", action="store_true",
+                        help="远程模式交互输入 SSH 密码 (需终端前台运行; "
+                             "同主机 1 分钟内复用连接, 只输一次)")
     parser.add_argument("--local", action="store_true",
                         help="检测本机 (无需 SSH; BIOS/内存等完整信息需 root)")
     parser.add_argument("-m", "--modules", default="all",
@@ -126,13 +130,15 @@ def main(argv=None):
         return 0
     if args.local and args.hosts:
         parser.error("--local 与 -H/--hosts 互斥")
+    if args.ask_pass and args.local:
+        parser.error("--ask-pass 仅用于远程模式 (-H)")
     if not args.local and not args.hosts:
         parser.error("需要 --local 或 -H/--hosts (或 --list-modules)")
 
     hosts = [LOCAL] if args.local else \
         [h.strip() for h in args.hosts.split(",") if h.strip()]
     if args.set_numa:
-        return set_numa(hosts, args.set_numa)
+        return set_numa(hosts, args.set_numa, ask_pass=args.ask_pass)
 
     if args.modules == "all":
         selected = set(MODULE_ORDER)
@@ -146,7 +152,8 @@ def main(argv=None):
     host_results, failed = [], []
     for host in hosts:
         try:
-            host_results.append((display_host(host), collect(host, selected)))
+            host_results.append((display_host(host), collect(host, selected,
+                                                            ask_pass=args.ask_pass)))
         except SshError as exc:
             print("错误: %s" % exc, file=sys.stderr)
             failed.append(display_host(host))

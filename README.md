@@ -7,7 +7,7 @@ JSON 或 Markdown 报告。面向性能测试前的机器基线核对 (NUMA 拓�
 ## 前置条件
 
 - Python ≥ 3.8, 仅标准库
-- 远程模式: 目标机 `ssh root@<host>` 免密可登录
+- 远程模式: 目标机 `ssh root@<host>` 免密可登录; 或加 `--ask-pass` 交互输入密码
 - 本机模式 (`--local`): 无需 SSH; BIOS/内存等完整信息仍需 root (sudo) 运行
 
 ## 快速开始
@@ -18,6 +18,10 @@ sudo python3 machconf.py --local
 
 # 远程全模块检测, 表格输出
 python3 machconf.py -H 192.0.2.10
+
+# 无免密时交互输密码 (终端前台运行; 同主机 1 分钟内复用连接, 只输一次)
+python3 machconf.py -H 192.0.2.10 --ask-pass
+python3 machconf.py -H 192.0.2.10,192.0.2.11 --ask-pass
 
 # 单模块 (bios / os / numa / hardware)
 python3 machconf.py --local -m numa
@@ -57,6 +61,12 @@ python3 machconf.py -H 192.0.2.10 --set-numa 0
 两种模式走同一套模块与探测命令 (`bash -s`): 远程模式经 `ssh root@<host>` 执行,
 本机模式 (`--local`) 直接在本机执行, 输出与远程模式一致 (表头为本机真实主机名)。
 非 root 本机运行时, dmidecode 等需要特权的探测会优雅降级为 `N.A.` 并给出原因。
+
+### 密码登录 (--ask-pass)
+
+未配置免密的机器可加 `--ask-pass`: 密码由 ssh 自己在终端提示输入, 不经过本工具、
+不进命令行参数或 shell 历史; 需在终端前台运行 (无终端的管道/定时任务场景请改用免密)。
+同主机的连接会通过 ControlMaster 复用 1 分钟, 期间重复执行不再重复输密码。
 
 ## numa_balancing.sh
 

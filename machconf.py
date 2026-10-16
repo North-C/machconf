@@ -10,11 +10,13 @@
   python3 machconf.py -H 192.168.25.65 -f markdown        # Markdown 报告
   python3 machconf.py -H 192.168.25.65 -f csv             # CSV 长表 (Excel/pandas)
   python3 machconf.py -H 192.168.25.65,192.168.25.61 -f csv-wide   # CSV 宽表 (多机对比)
+  python3 machconf.py -H 192.168.25.65 -m cube            # CubeSandbox 组件对比社区 v0.7.1
   python3 machconf.py -H 192.168.25.65 --set-numa 0       # 修改 numa_balancing (需root)
   python3 machconf.py --list-modules                      # 列出可用模块
 
 模块: bios (BIOS配置/拓扑/功耗/超频), os (内核/hugepage), numa (NUMA balancing),
-      hardware (内存/磁盘). numa 的本机修改可直接用同目录 numa_balancing.sh.
+      hardware (内存/磁盘), cube (CubeSandbox 组件是否与社区 v0.7.1 一致).
+      numa 的本机修改可直接用同目录 numa_balancing.sh.
 """
 
 import argparse
@@ -143,7 +145,8 @@ def set_numa(hosts, value, ask_pass=False):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(
-        description="机器配置检测工具 (BIOS/OS/NUMA/硬件), 详见 python3 machconf.py -h")
+        description="机器配置检测工具 (BIOS/OS/NUMA/硬件/CubeSandbox 组件), "
+                    "详见 python3 machconf.py -h")
     parser.add_argument("-H", "--hosts", help="远程目标机, 逗号分隔 (ssh 免密)")
     parser.add_argument("--ask-pass", action="store_true",
                         help="远程模式交互输入 SSH 密码 (需终端前台运行; "
@@ -154,6 +157,9 @@ def main(argv=None):
                         help="模块名逗号分隔 (默认 all): %s" % ",".join(MODULE_ORDER))
     parser.add_argument("-f", "--format", default="table", choices=list(RENDERERS),
                         help="输出格式 (默认 table)")
+    parser.add_argument("--cube-root", metavar="DIR",
+                        help="cube 模块: CubeSandbox 安装目录 "
+                             "(默认 /usr/local/services/cubetoolbox)")
     parser.add_argument("--set-numa", metavar="0|1", choices=["0", "1"],
                         help="修改 kernel.numa_balancing (root)")
     parser.add_argument("--list-modules", action="store_true", help="列出可用模块")
@@ -171,6 +177,8 @@ def main(argv=None):
     if not args.local and not args.hosts:
         parser.error("需要 --local 或 -H/--hosts (或 --list-modules)")
 
+    if args.cube_root:
+        MODULES["cube"].root = args.cube_root
     hosts = [LOCAL] if args.local else \
         [h.strip() for h in args.hosts.split(",") if h.strip()]
     if args.set_numa:

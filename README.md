@@ -1,7 +1,7 @@
 # machconf — 机器配置检测工具
 
-通过 SSH 免密登录批量检测服务器的 BIOS / OS / NUMA / 硬件配置, 输出对齐表格、
-JSON 或 Markdown 报告。面向性能测试前的机器基线核对 (NUMA 拓扑、大页、内存频率、
+通过 SSH 免密登录批量检测服务器的 BIOS / OS / NUMA / 硬件配置, 并核对机器上部署的
+CubeSandbox 组件是否与社区 v0.7.1 原版一致, 输出对齐表格、JSON 或 Markdown 报告。面向性能测试前的机器基线核对 (NUMA 拓扑、大页、内存频率、
 数据盘类型等), x86 与 ARM 机型均可使用, 平台不可用项优雅降级为 `N.A.` 并说明原因。
 
 ## 前置条件
@@ -23,9 +23,14 @@ python3 machconf.py -H 192.0.2.10
 python3 machconf.py -H 192.0.2.10 --ask-pass
 python3 machconf.py -H 192.0.2.10,192.0.2.11 --ask-pass
 
-# 单模块 (bios / os / numa / hardware)
+# 单模块 (bios / os / numa / hardware / cube)
 python3 machconf.py --local -m numa
 python3 machconf.py -H 192.0.2.10 -m numa
+
+# CubeSandbox 组件对比社区 v0.7.1 (需 root; 非默认安装目录用 --cube-root)
+python3 machconf.py -H 192.0.2.10 -m cube
+python3 machconf.py -H 192.0.2.10,192.0.2.11 -m cube -f csv-wide > cube-compare.csv
+sudo python3 machconf.py --local -m cube --cube-root /opt/cubetoolbox
 
 # 多台汇总
 python3 machconf.py -H 192.0.2.10,192.0.2.11
@@ -48,6 +53,7 @@ python3 machconf.py -H 192.0.2.10 --set-numa 0
 | `os` | 发行版/内核版本、静态大页 (容量/空闲/各 NUMA 节点分布)、透明大页 THP | /proc/meminfo, /sys/devices/system/node |
 | `numa` | `kernel.numa_balancing` 运行时开关、内核启动参数覆盖、sysctl 持久化配置 | /proc/sys, /proc/cmdline, sysctl.conf |
 | `hardware` | 内存容量/类型/频率 (实配与标称)、磁盘大小/类型 (NVMe/SSD/HDD)/角色 (系统盘/数据盘/未挂载) | dmidecode, lsblk |
+| `cube` | CubeSandbox 各组件文件、运行进程、容器镜像与社区 v0.7.1 离线包是否一致 | sha256sum, /proc/\<pid\>/exe, docker |
 
 输出格式: `table` 终端对齐表格; `json` 结构化; `markdown` 报告; `csv` 长表
 (主机/模块/配置项/值/说明, 一行一项, 带 UTF-8 BOM 可直接用 Excel 打开);
@@ -61,6 +67,32 @@ python3 machconf.py -H 192.0.2.10 --set-numa 0
   推断 (标注"推断")。
 - 磁盘角色按挂载点判别, 逐盘 `lsblk` 聚合含 LVM 子设备的挂载点, 系统盘 = 挂载了
   `/`、`/boot` 或 swap 的盘, 其余已挂载盘为数据盘。
+
+## CubeSandbox 组件对比 (cube 模块)
+
+判断机器上部署的 CubeSandbox 是否就是社区发布的 v0.7.1 (只读, 不做任何修改)。
+基准清单在 `refs/` 下, 原样取自 cube-perf-bench (`cpb.py release-ref` 由社区
+one-click 离线包生成的 `release/v0.7.1-<arch>.json`, 及 `pins.json` 中的容器镜像 ID),
+判定口径与 `cpb.py verify-deploy` 一致; 按目标机 `uname -m` 选 aarch64 / x86_64 基准。
+
+| 对比对象 | 方法 | 是否计入结论 |
+| --- | --- | --- |
+| 二进制 (ELF / 内核 / guest 镜像 / agent 盘) | 安装目录下逐个文件 SHA256 | 是, 不同或缺失即"不一致" |
+| 运行进程 | `/proc/<pid>/exe` 的 SHA256 (可发现启动后被替换的二进制) | 是 |
+| 容器 cube-egress / cube-lifecycle-manager / cube-proxy | docker image ID (config digest, 与仓库/标签无关) | 运行中容器镜像不同计入 |
+| 脚本 / 配置 / 软链接 | SHA256 / 链接目标 | 否, 安装器会渲染部分配置, 仅列出 |
+
+输出条目: `CubeSandbox 结论` (一致 / 不一致, 说明中给出各类差异数)、对比基准、
+安装目录、部署版本 (release-manifest.json 与 VERSION.txt)、每个组件一行
+(`组件 Cubelet  一致 (二进制 3/3)`, 差异文件列在说明中)、每个运行中的基准二进制一行、
+每个容器一行。未部署时只输出一行 `CubeSandbox 结论  N.A.`。
+
+- 需对约 700 MB 安装文件计算 SHA256, 该模块的探测超时放宽到 180 秒 (实测 arm64 部署机约 7 秒);
+- 非 root 时无法读取其它用户进程的 exe, 运行进程项为 `N.A.`;
+- 无 docker 时容器项为 `N.A.` 并给出期望的镜像引用与 image ID, 结论中注明"容器未核对";
+- 升级基准版本: 用 cube-perf-bench `cpb.py release-ref` 生成新的 `release/<ver>-<arch>.json`,
+  拷入 `refs/` 并更新 `refs/cubesandbox-<ver>.json` (容器 image ID 与各架构清单文件名),
+  再改 `modules/cubesandbox.py` 的 `INDEX_FILE`。
 
 ## 本机模式与远程模式
 
@@ -95,4 +127,6 @@ cd tools/machconf
 python3 -m unittest test_machconf -v
 ```
 
-fixture 来自鲲鹏 950 / openEuler 24.03 (aarch64) 真实输出与 x86 合成输出。
+fixture 来自鲲鹏 950 / openEuler 24.03 (aarch64) 真实输出与 x86 合成输出;
+`cubesandbox-v071-arm64` 为社区 v0.7.1 arm64 一键部署机器上 cube 模块的真实探测输出
+(docker 镜像列表只保留 CubeSandbox 组件)。

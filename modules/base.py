@@ -160,6 +160,7 @@ class Module:
     name = ""    # CLI 选择的短名 (-m)
     title = ""   # 展示标题
     group = ""   # 汇总表中的分组标题 (如 "OS 配置")
+    timeout = 30  # 探测耗时上限 (秒); 多模块合并执行时取最大值
 
     def probes(self):
         """返回 [(tag, command), ...]; command 在远端执行, 输出以 tag 标记."""

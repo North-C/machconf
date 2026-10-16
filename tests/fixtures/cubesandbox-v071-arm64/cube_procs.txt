@@ -1,0 +1,5 @@
+1231946|1385bc6aed3f0f6a3ee8059da5e500aeff7af4333191b6cb8bdac3110031cbab|/usr/local/services/cubetoolbox/CubeOps/bin/cubeops
+2348512|6814fadeec55e27227686367ab3ed957411ca926caabc63dd12121cbeb190dac|/usr/local/services/cubetoolbox/Cubelet/bin/cubelet
+2643051|2398ba285f612cb0e6cbfa5c0275488a1e655a34684065c06ea400182cfcdcb9|/usr/local/services/cubetoolbox/CubeMaster/bin/cubemaster
+32083|6a84128504f7e1575d5d86e4f6da9953c794356b2875acae968344d94421d34a|/usr/local/services/cubetoolbox/CubeAPI/bin/cube-api
+32085|cfdab176aaa39f39352ce2c3eff98d5d7cab4837385a32f6363db835a94e8d65|/usr/local/services/cubetoolbox/CubeTemplateCenter/bin/templatecenter

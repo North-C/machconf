@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "release_version": "v0.7.1",
+  "tag": "v0.7.1",
+  "registries": [
+    "cube-sandbox-cn.tencentcloudcr.com",
+    "cube-sandbox-int.tencentcloudcr.com"
+  ],
+  "note": "Not in the offline bundle. image_id is the image config digest, identical for an architecture whichever registry or tag (v0.7.1, v0.7.1-<arch>) it was pulled from; observed 2026-10-15. manifest_digests are informational (int index + per-arch, cn per-arch tags).",
+  "arch_references": {
+    "aarch64": "cubesandbox-v0.7.1-arm64.json",
+    "x86_64": "cubesandbox-v0.7.1-amd64.json"
+  },
+  "containers": {
+    "cube-egress": {
+      "repository": "cube-sandbox/cube-egress",
+      "image_id": {
+        "aarch64": "sha256:7363ab280b3497e1d1f644dae6183c959bc9d40baf8ad98a59c6a03a17074bc4",
+        "x86_64": "sha256:f395125a51b59f5460ce0fb2c60afb9a18db5bf6dfd41d0f97381adab1ca076b"
+      },
+      "manifest_digests": [
+        "sha256:3e88de3d53ecbf6bd6b083ea9a990cfdb366e92e3c577c0f2ee1fef11930e1ce",
+        "sha256:6769d59841401ec0f34bcec697ba553364688647816166dccd5377d1e7b57ba0",
+        "sha256:dd8e1f5e798c988234265e61243519df897bbb81ec39db24d276cd576d273469",
+        "sha256:82269ecbdd140a54e134ba7e5e1451cae24dba8ed0106b1e65eed16532566802",
+        "sha256:df83f03b45a027c98feba45fb1bc68f5098db1689eea1aa7df7624ffc28e3d89"
+      ]
+    },
+    "cube-lifecycle-manager": {
+      "repository": "cube-sandbox/cube-lifecycle-manager",
+      "image_id": {
+        "aarch64": "sha256:91dfa6829f4dbbf96d3fdc8ef22daea5548a28370ac0ef42510f5be7c14d8546",
+        "x86_64": "sha256:618b6c74def33294d715301a47369f55729e046ca405650f51b8ef4ebc24a22e"
+      },
+      "manifest_digests": [
+        "sha256:6b130a166dce16c294cd88bf7210496e57808f2200a05c685dd8dbc4ce2bc861",
+        "sha256:3e252bd855b5f8c3607474c7e1c2f8f626418a7ec0599374265add42b405efee",
+        "sha256:6df2c6756b12e07fb961fda13ab7d5f1a4085ca007accceee5566d4100d20909",
+        "sha256:44be42d9721ea3e99813c20ecf748133dccfc45ef3c7b454ecbc28c7d4b41433",
+        "sha256:3e122c91cfa46253d4fc63135003f3577ab77a370d11a5bf0d8cb367dd876fb4"
+      ]
+    },
+    "cube-proxy": {
+      "repository": "cube-sandbox/cube-proxy",
+      "image_id": {
+        "aarch64": "sha256:67957f63c92a4d52190a196a6a2adaaf6fd9664ef37f54f98b2cdc52489102ee",
+        "x86_64": "sha256:a7fc0a33cceb9e928705d166ad65e6286736ef8a6c71a29179760c1c31118424"
+      },
+      "manifest_digests": [
+        "sha256:b5a196be3698d820c1ae70a3a7a9fd0439badd43e74a2c4954255f7dc69f86dc",
+        "sha256:3938a8cddda14f1de9c69df5b738b713804269d77e049573836aafeea2b6bee1",
+        "sha256:d4bfd7d1b682a8c3e04759eae1e121590474aa9a31997eab94b4da9efad199e3",
+        "sha256:d3a016508b1f2ff590d496dbcfde1f5f670fe6c5bf8bf096c7c8330190b7b604",
+        "sha256:50865cf1ecc09c40e75957195394bae035f77d49126638a0f534efd9dfca90a3"
+      ]
+    }
+  }
+}

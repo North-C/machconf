@@ -11,6 +11,7 @@ from .base import (
     split_sections,
 )
 from .bios import BiosModule
+from .cubesandbox import CubeSandboxModule
 from .hardware import HardwareModule
 from .numa import NumaModule
 from .osconf import OsModule
@@ -19,11 +20,12 @@ from .osconf import OsModule
 LOCAL = "local"
 
 # 汇总表的展示顺序
-_ORDER = ["bios", "os", "numa", "hardware"]
+_ORDER = ["bios", "os", "numa", "hardware", "cube"]
 
 
 def _build_registry():
-    modules = [BiosModule(), OsModule(), NumaModule(), HardwareModule()]
+    modules = [BiosModule(), OsModule(), NumaModule(), HardwareModule(),
+               CubeSandboxModule()]
     by_name = {m.name: m for m in modules}
     return by_name
 
@@ -43,8 +45,9 @@ def make_runner(host, ask_pass=False, **kwargs):
 def collect(host, module_names, runner=None, ask_pass=False):
     """在 host ('local' 或远程地址) 上执行指定模块的探测并解析,
     返回 [(module, [Item])], 顺序按 MODULE_ORDER."""
-    runner = runner or make_runner(host, ask_pass=ask_pass)
     mods = [MODULES[name] for name in MODULE_ORDER if name in module_names]
+    timeout = max([Module.timeout] + [mod.timeout for mod in mods])
+    runner = runner or make_runner(host, ask_pass=ask_pass, command_timeout=timeout)
     probes = []
     for mod in mods:
         probes.extend(mod.probes())

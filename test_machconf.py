@@ -234,6 +234,145 @@ class BiosTests(unittest.TestCase):
         self.assertEqual(items["BIOS 固件"].note, "发布日期 02/10/2026")
 
 
+CUBE_FIXTURE = "cubesandbox-v071-arm64"  # 社区 v0.7.1 arm64 一键部署后的真实探测输出
+
+
+def cube_sections(**overrides):
+    sections = {tag: load(CUBE_FIXTURE, tag) for tag, _ in MODULES["cube"].probes()}
+    sections.update(overrides)
+    return sections
+
+
+def cube_items(sections):
+    return {item.key: item for item in MODULES["cube"].parse(sections)}
+
+
+def replace_line(text, prefix, line):
+    """把以 prefix 开头的那一行替换为 line (fixture 变异)."""
+    lines = text.splitlines()
+    idx = [i for i, cur in enumerate(lines) if cur.startswith(prefix)]
+    assert len(idx) == 1, prefix
+    lines[idx[0]] = line
+    return "\n".join(lines)
+
+
+class CubeSandboxTests(unittest.TestCase):
+    def test_community_v071_deployment_matches(self):
+        items = cube_items(cube_sections())
+        self.assertEqual(items["CubeSandbox 结论"].value, "一致")
+        self.assertIn("脚本/配置 17 项不同", items["CubeSandbox 结论"].note)
+        self.assertEqual(items["CubeSandbox 对比基准"].value, "社区 v0.7.1 (aarch64)")
+        self.assertEqual(items["CubeSandbox 部署版本"].value, "v0.7.1-arm64 (commit 31d911e430fd)")
+        self.assertTrue(items["CubeSandbox 部署版本"].note.startswith("与基准相同"))
+        self.assertEqual(items["组件 Cubelet"].value, "一致 (二进制 3/3)")
+        self.assertIn("config/config.toml", items["组件 Cubelet"].note)
+        self.assertEqual(items["组件 cube-kernel-scf"].value, "一致 (二进制 1/1)")  # 含软链接
+        self.assertEqual(items["组件 webui"].value, "有差异 (脚本/配置 22/23)")
+        self.assertTrue(items["进程 Cubelet/bin/cubelet"].value.startswith("一致 (pid "))
+        self.assertEqual(items["容器 cube-proxy"].value, "一致 (容器 running)")
+        self.assertIn("本地另有", items["容器 cube-proxy"].note)
+
+    def test_binary_and_process_mismatch(self):
+        sections = cube_sections()
+        other = "f" * 64
+        sections["cube_files"] = replace_line(
+            sections["cube_files"], "F|Cubelet/bin/cubelet|", "F|Cubelet/bin/cubelet|" + other)
+        sections["cube_files"] = replace_line(
+            sections["cube_files"], "F|Cubelet/bin/cubecli|", "M|Cubelet/bin/cubecli|")
+        sections["cube_procs"] += "\n4242|%s|/opt/cube/cubelet (deleted)" % other
+        items = cube_items(sections)
+        self.assertEqual(items["CubeSandbox 结论"].value, "不一致")
+        self.assertIn("二进制 2 个, 运行进程 1 个, 容器 0 个", items["CubeSandbox 结论"].note)
+        self.assertEqual(items["组件 Cubelet"].value, "不一致 (二进制 1/3 相同)")
+        self.assertIn("不同: bin/cubelet; 缺失: bin/cubecli", items["组件 Cubelet"].note)
+        proc = items["进程 Cubelet/bin/cubelet"]
+        self.assertTrue(proc.value.startswith("不一致 (pid "))
+        self.assertIn("pid 4242 /opt/cube/cubelet", proc.note)
+        self.assertIn("磁盘文件已删除", proc.note)
+
+    def test_symlink_replaced_by_file(self):
+        sections = cube_sections()
+        sections["cube_files"] = replace_line(
+            sections["cube_files"], "L|cube-kernel-scf/vmlinux|",
+            "F|cube-kernel-scf/vmlinux|" + "0" * 64)
+        items = cube_items(sections)
+        self.assertEqual(items["CubeSandbox 结论"].value, "一致")  # 软链接按配置类处理, 不计入结论
+        self.assertIn("vmlinux", items["组件 cube-kernel-scf"].note)
+
+    def test_container_differ_and_no_docker(self):
+        sections = cube_sections()
+        sections["cube_docker"] = replace_line(
+            sections["cube_docker"], "C|/cube-proxy|",
+            "C|/cube-proxy|sha256:%s|mirror.local/cube-proxy:dev|running" % ("1" * 64))
+        items = cube_items(sections)
+        self.assertEqual(items["CubeSandbox 结论"].value, "不一致")
+        self.assertEqual(items["容器 cube-proxy"].value, "不一致 (容器 running)")
+        self.assertIn("基准 sha256:67957f63c92a", items["容器 cube-proxy"].note)
+
+        items = cube_items(cube_sections(cube_docker="NODOCKER"))
+        self.assertEqual(items["CubeSandbox 结论"].value, "一致")
+        self.assertIn("docker 不可用", items["CubeSandbox 结论"].note)
+        self.assertEqual(items["容器 cube-egress"].value, "N.A.")
+        self.assertIn("cube-sandbox/cube-egress:v0.7.1", items["容器 cube-egress"].note)
+
+    def test_container_not_running(self):
+        lines = [line for line in load(CUBE_FIXTURE, "cube_docker").splitlines()
+                 if not line.startswith(("C|/cube-egress|", "C|/cube-lifecycle-manager|"))
+                 and "/cube-lifecycle-manager|" not in line]
+        items = cube_items(cube_sections(cube_docker="\n".join(lines)))
+        self.assertEqual(items["容器 cube-egress"].value, "无容器")
+        self.assertIn("本地有基准镜像", items["容器 cube-egress"].note)
+        self.assertEqual(items["容器 cube-lifecycle-manager"].value, "未部署")
+
+    def test_not_deployed_and_unsupported_arch(self):
+        items = cube_items(cube_sections(cube_files="NOROOT"))
+        self.assertEqual(list(items), ["CubeSandbox 结论"])
+        self.assertIn("未部署 CubeSandbox", items["CubeSandbox 结论"].note)
+        items = cube_items(cube_sections(cube_arch="riscv64"))
+        self.assertEqual(items["CubeSandbox 结论"].value, "N.A.")
+        self.assertIn("riscv64", items["CubeSandbox 结论"].note)
+
+    def test_non_root_without_processes(self):
+        items = cube_items(cube_sections(cube_uid="1000", cube_procs=""))
+        self.assertEqual(items["CubeSandbox 运行进程"].value, "N.A.")
+
+    def test_reference_files_cover_both_arches(self):
+        mod = MODULES["cube"]
+        for arch in ("aarch64", "x86_64"):
+            ref = mod.reference(arch)
+            self.assertEqual(ref["git_commit"], "31d911e430fdf8a8879bd062b8e78066c1a8e89d")
+            self.assertEqual(ref["files"]["Cubelet/bin/cubelet"]["kind"], "binary")
+            for spec in mod.index()["containers"].values():
+                self.assertRegex(spec["image_id"][arch], r"^sha256:[0-9a-f]{64}$")
+
+    def test_probe_script_against_temp_root(self):
+        """在本机对临时安装目录真实执行探测脚本 (文件/软链接/缺失/不可读)."""
+        import os
+        import tempfile
+        from modules.base import LocalRunner, build_script
+        from modules.cubesandbox import CubeSandboxModule
+        with tempfile.TemporaryDirectory() as root:
+            for rel, text in (("VERSION.txt", load(CUBE_FIXTURE, "cube_version")),
+                              ("release-manifest.json", load(CUBE_FIXTURE, "cube_manifest")),
+                              ("Cubelet/bin/cubelet", "not the release build\n")):
+                path = Path(root, rel)
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(text)
+            os.makedirs(Path(root, "cube-kernel-scf"))
+            os.symlink("vmlinux-bm", Path(root, "cube-kernel-scf", "vmlinux"))
+            mod = CubeSandboxModule(root=root)
+            sections = split_sections(LocalRunner().run_script(build_script(mod.probes())))
+        sections["cube_arch"] = "aarch64"  # 与本机架构无关
+        items = {item.key: item for item in mod.parse(sections)}
+        self.assertEqual(items["CubeSandbox 安装目录"].value, root)
+        self.assertTrue(items["CubeSandbox 部署版本"].note.startswith("与基准相同"))
+        self.assertEqual(items["CubeSandbox 结论"].value, "不一致")
+        self.assertIn("不同: bin/cubelet; 缺失: bin/cubecli", items["组件 Cubelet"].note)
+        self.assertEqual(items["组件 cube-kernel-scf"].value, "不一致 (二进制 0/1 相同)")
+        self.assertNotIn("vmlinux,", items["组件 cube-kernel-scf"].note)  # 软链接一致
+        self.assertEqual(items["组件 webui"].value, "未部署 (23 项均缺失)")
+
+
 class RenderTests(unittest.TestCase):
     def _fake_results(self):
         from modules.base import Item

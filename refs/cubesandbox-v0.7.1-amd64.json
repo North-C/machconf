@@ -1,0 +1,1526 @@
+{
+  "schema_version": 1,
+  "release_version": "v0.7.1-amd64",
+  "git_commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+  "bundle": {
+    "name": "cube-sandbox-one-click-v0.7.1-amd64.tar.gz",
+    "sha256": "a516ed71e90e273d03f053a26bbbf3932e0d747387fbccd25ec76f89b20bc0a1",
+    "url": "https://github.com/TencentCloud/CubeSandbox/releases/download/v0.7.1/cube-sandbox-one-click-v0.7.1-amd64.tar.gz"
+  },
+  "install_root": "/usr/local/services/cubetoolbox",
+  "files": {
+    "CubeAPI/Dockerfile": {
+      "sha256": "d7bef7ce39e617cdce88bf4fde7a168211ed818db339c957b0281c60f762c9ce",
+      "size": 2022,
+      "kind": "config"
+    },
+    "CubeAPI/bin/cube-api": {
+      "sha256": "9bafe4e0702b2014bf81a837ed0cf385c0102f3f4b82efd646ed5a01c955f6a7",
+      "size": 9157400,
+      "kind": "binary"
+    },
+    "CubeMaster/Dockerfile": {
+      "sha256": "7dcfca4d75620dca3415f39273c192bef8447e1053bd44e66d9ee0e3ea9d6880",
+      "size": 5451,
+      "kind": "config"
+    },
+    "CubeMaster/bin/cubemaster": {
+      "sha256": "6045a96ea76df0c40c9b669bbd873838a0749fe9e3ed1ca4f79ab095e72aeef7",
+      "size": 46264612,
+      "kind": "binary"
+    },
+    "CubeMaster/bin/cubemastercli": {
+      "sha256": "0565f8d941a6ffda9f95f89968e031d16dbd92b490bd4367b635031425fc30ce",
+      "size": 31547684,
+      "kind": "binary"
+    },
+    "CubeMaster/conf.yaml": {
+      "sha256": "9b76913b4f16346f5e9f264eed1cb49f542a71a87960977d58b95aa1c8d46ed9",
+      "size": 4886,
+      "kind": "config"
+    },
+    "CubeMaster/docker-install-volume-deps.sh": {
+      "sha256": "963e2e62794a417bbc5dc780e080cf0ce2c8393201a1e8ae8e7641519699c1ee",
+      "size": 4869,
+      "kind": "script"
+    },
+    "CubeMaster/plugin/cube-volume-cos": {
+      "sha256": "203fee3bc26f0d70285e864697370e986b8997c06b19d61dd8da1e4a11a5938a",
+      "size": 15960,
+      "kind": "config"
+    },
+    "CubeMaster/plugin/cube-volume-s3": {
+      "sha256": "822748e25ccdd62d29f415994bb70082b8ae9cd8445f3fa678fccf2b5bbd729e",
+      "size": 7700664,
+      "kind": "binary"
+    },
+    "CubeMaster/plugin/install-deps.sh": {
+      "sha256": "a56ff68470099bf74af4a17e1213b2e711e8bccb3bbb4fc0c7ea2ac258908eb1",
+      "size": 14361,
+      "kind": "script"
+    },
+    "CubeMaster/plugin/install-s3-deps.sh": {
+      "sha256": "3a3de5e193c4c865c370f800b7aeedf38084f80b660019c312ffede25ba9d85b",
+      "size": 4880,
+      "kind": "script"
+    },
+    "CubeMaster/plugin/volume-cos.conf.example": {
+      "sha256": "bfb75d4310742dde49b58e12faffcda0f57509012d1494aad200ce631328b773",
+      "size": 570,
+      "kind": "config"
+    },
+    "CubeMaster/plugin/volume-s3.conf.example": {
+      "sha256": "de4e99379c29c51e77284f9bd20fca07d54871597cb3eeca7afb447608cd43e9",
+      "size": 1375,
+      "kind": "config"
+    },
+    "CubeOps/Dockerfile": {
+      "sha256": "54bdcd93497b1243cf2993cbe80258675bd747544e783968b81709676c5a7865",
+      "size": 939,
+      "kind": "config"
+    },
+    "CubeOps/bin/cubeops": {
+      "sha256": "4a0637d279b35776135fb8ae4ad23b39f08cda52473d4cea3c5a190e663ed974",
+      "size": 33992996,
+      "kind": "binary"
+    },
+    "CubeOps/bin/cubeopscli": {
+      "sha256": "d5b733a06ec98987433337a58303165432ab3821b34871b08ff2ca712142f8bb",
+      "size": 8266020,
+      "kind": "binary"
+    },
+    "CubeS3lvol/README.md": {
+      "sha256": "7090488ac0a52ec6e4dc56cb452ad2c5bbdc12fd92f770b39e9f507f2b57c7f4",
+      "size": 26707,
+      "kind": "config"
+    },
+    "CubeS3lvol/VERSION": {
+      "sha256": "31fa594b53d45bb192112eb33f1b15f1c3278418d67f6787a02131fd47fe61a3",
+      "size": 782,
+      "kind": "config"
+    },
+    "CubeS3lvol/bin/s3lvol_tgt": {
+      "sha256": "2578dbd9794ce42d9b73e34129b5297d07f969f85b4addf448392c7963e564ce",
+      "size": 41946696,
+      "kind": "binary"
+    },
+    "CubeS3lvol/scripts/__pycache__/rpc_compat.cpython-38.pyc": {
+      "sha256": "b403f2eeffb95938dc4a8a82ea448e9805a28de337631fd48c332015903851da",
+      "size": 1689,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/__init__.py": {
+      "sha256": "432231e0ed0e5cf58542c7ad769fad1034d19cf25219740e629863c7105974ab",
+      "size": 331,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/__pycache__/__init__.cpython-38.pyc": {
+      "sha256": "1ab81f5b207e657efef80cf3a66981463e08ad1ada9f398a17c415ae672d2024",
+      "size": 297,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/__pycache__/version.cpython-38.pyc": {
+      "sha256": "d7f163670de274a2e3c6b0f3666ff8183d1e45c3eb6cb3dd1d358054f691b413",
+      "size": 214,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__init__.py": {
+      "sha256": "8c2c3c9aadbbdad837f881fa48090f83431f85373d288d41ea01ebc4e58f9869",
+      "size": 689,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/__init__.cpython-38.pyc": {
+      "sha256": "1c02588655d2144dedf15f5e7f9634f0212b9524826cb3206e94dfabc12d2e99",
+      "size": 755,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/accel.cpython-38.pyc": {
+      "sha256": "d58c8f6771d390d61b5fab3feafd86b25f8ed658cd60074d7bcf3713746c607b",
+      "size": 4304,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/app.cpython-38.pyc": {
+      "sha256": "29a0f45d0c861781bf1f2380d09b97795dbcc837479fc89a01d722ba57bcf2ab",
+      "size": 6755,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/bdev.cpython-38.pyc": {
+      "sha256": "12caedd33a51f061d536c2f066201da37f776d929d42b9d685eb6347742f7270",
+      "size": 38748,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/bdev_nvme.cpython-38.pyc": {
+      "sha256": "438146b838f063daa6a3a4cf4d1a33052994db02f4d5822a9351614bfeefdb3c",
+      "size": 25973,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/fsdev.cpython-38.pyc": {
+      "sha256": "261af49c15a24c06633f2cc20b570187b23b93821214baf7d55b9fa2ca319b14",
+      "size": 2396,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/iobuf.cpython-38.pyc": {
+      "sha256": "dc5af78fa151776e8602a140a14426bda4d32124bfb9dc85be49abdd97ea7450",
+      "size": 1555,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/iscsi.cpython-38.pyc": {
+      "sha256": "8df90508e87071c80a3b346a7f87e3b87fc705f2a76d42c3249418a33b8b681f",
+      "size": 19393,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/keyring.cpython-38.pyc": {
+      "sha256": "df90a6f7d6b0e183c080e86bce84291f894ad8776f7e9069a133e290c6ec33b2",
+      "size": 1695,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/log.cpython-38.pyc": {
+      "sha256": "773e559d50b26e1b940c769bc45a2a1a2d58e575311ac8af8319407c12f1361f",
+      "size": 2733,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/lvol.cpython-38.pyc": {
+      "sha256": "accb4fdc4435a58c7c36a5f284a9ab2e2900c9db6a294156aba1d4629dc2c0a8",
+      "size": 9413,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/misc.cpython-38.pyc": {
+      "sha256": "f18f6f8db73677a78e9abe5fda4b50e209b4f1b10bd16c3316db77c7e116b044",
+      "size": 10088,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/nbd.cpython-38.pyc": {
+      "sha256": "d1b519189be5e670ab923a9b80892a050d0bf4bbd95fa3da573c5280b5ce95df",
+      "size": 1508,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/notify.cpython-38.pyc": {
+      "sha256": "ed6667b1572fd27471801edd7b24e95f5c4f09a85488167d0457f6b8a8f1d5d0",
+      "size": 1169,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/nvmf.cpython-38.pyc": {
+      "sha256": "1e2842dea243dbb08299ab6172aeedc1523dd49edc01ecba45392e5cfc2c64be",
+      "size": 22021,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/sock.cpython-38.pyc": {
+      "sha256": "71c769179913818ac7598f254fa7eda8db926746c11e56b3dd22f02e4ffc5cd0",
+      "size": 3032,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/trace.cpython-38.pyc": {
+      "sha256": "f69af4dbb06e9c91dac0bb5241758a63048b3fa090f199defeae438aa024ee54",
+      "size": 2968,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/ublk.cpython-38.pyc": {
+      "sha256": "cc2b4e7f59842ccf3c1108d78398c130089f7f3b9337a5eb808ede67469c1980",
+      "size": 2813,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/vfio_user.cpython-38.pyc": {
+      "sha256": "42ed15917a3415e1c0f5188be34d4df03c4438b026bf9ba0f3d47c51c4a9a4f5",
+      "size": 3747,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/vhost.cpython-38.pyc": {
+      "sha256": "ece82c3cb3f4a3e71e53a344e99a982367102f98d9ee508f8bb61d6c32e56bb1",
+      "size": 7073,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/__pycache__/vmd.cpython-38.pyc": {
+      "sha256": "ee023da5d493ee793cf74fe85ec98049db509a4ea2986b39b3f72df22f94977f",
+      "size": 1198,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/accel.py": {
+      "sha256": "0fd848e73e3563b4aebf271456ec9a8855e7d3a2ad8c8d57a431c09d6677dc4a",
+      "size": 4879,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/app.py": {
+      "sha256": "b7a6a290a395a3bca831e54896d30d86665a3b765b61ee8202e5cb1053106b51",
+      "size": 7443,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/bdev.py": {
+      "sha256": "1a3b7be0a71c1ec54ffe66d4d878135b48c722f9afde767ef8792f26ffee4784",
+      "size": 53250,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/bdev_nvme.py": {
+      "sha256": "ecb7df0557bbb3d4dd0d1eceb522fd0e511d03615687aac7ca489eb4849ef384",
+      "size": 38233,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/fsdev.py": {
+      "sha256": "57b2935285cdc4e17323a0f75c6b6aedc2ed97401d9b65a2436e65f758f094aa",
+      "size": 2637,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/iobuf.py": {
+      "sha256": "b22aeb68af30653422e2cdc580b091b0899f0a8987f1369dbd01af839bdc63ab",
+      "size": 1725,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/iscsi.py": {
+      "sha256": "4e82eef4d2a1b23c9908c4a0247aacfba48f4e840567083928eaa3c608f93591",
+      "size": 26706,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/keyring.py": {
+      "sha256": "a6ff3635db6486b3f4048e815fdf05b31ddeda933019495cb38e5202e7c9e386",
+      "size": 1595,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/log.py": {
+      "sha256": "bfd7b296e7690013c12c891101dbc651c415b82c09ee738ceb339056b512ebbe",
+      "size": 2585,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/lvol.py": {
+      "sha256": "6cce9f0f49ec4d13511b0bed29ff1fbf6c8711d7377109676e7cd08439b54701",
+      "size": 12377,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/misc.py": {
+      "sha256": "38bf7907283f16339c53c700f461660dc3d9c557d38242ef8c9d8bc338fb6ad0",
+      "size": 11644,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/nbd.py": {
+      "sha256": "1c92af3b7eb6d548813727c06b5c9795611f25e61d273a79332dc81c4fd0ea4c",
+      "size": 1562,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/notify.py": {
+      "sha256": "1cb69db84f32f17d19dedb04d75676367b5ac1facf38113052395abdc6ab1fce",
+      "size": 1158,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/nvmf.py": {
+      "sha256": "27e19ce4cfd419f2264a6f9fbc617914b56007cf36c5ebdc405577222cae0e25",
+      "size": 31823,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/sock.py": {
+      "sha256": "9eefb5fc39b10d9c42f9c3d05e6243d7dade4bbef82e0229191623b2c5edec44",
+      "size": 4371,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/trace.py": {
+      "sha256": "2ba1fcecf8ea4225730d7a1c0f863c843eaa554a4028cddc3f36a3ea0b0a3145",
+      "size": 3172,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/ublk.py": {
+      "sha256": "c3092c1df1205c85ef33df8399ac3402189782d894f90f3b57463fb881db97a1",
+      "size": 3250,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/vfio_user.py": {
+      "sha256": "3c688629aa74d4206641c8eccb2f20a3a6dcd67675f5248c44da0a64f4722db8",
+      "size": 6050,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/vhost.py": {
+      "sha256": "0e5160f78f50ea51912c7aa71bd8bf09d84f3a064de367934c3a3e5c16fc1599",
+      "size": 9005,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/cli/vmd.py": {
+      "sha256": "1e447ddc0dcf77168c70eaa892fa8d2234f702acf34f7921d6e4b776f09e9191",
+      "size": 1012,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/rpc/__init__.py": {
+      "sha256": "838f2a30506a031c790c91e21fac31d363f51681fdf7fe478458935e35b4a0b6",
+      "size": 159,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/rpc/__pycache__/__init__.cpython-38.pyc": {
+      "sha256": "fc6f19288d4d72d03758910991df953f43e74476be5df1ff7ee283144d99e4fb",
+      "size": 196,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/rpc/__pycache__/client.cpython-38.pyc": {
+      "sha256": "0144524381c797837a6f80b926c9e2c47981b083eee3f4e4ae32b37d6c82f65a",
+      "size": 11975,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/rpc/__pycache__/cmd_parser.cpython-38.pyc": {
+      "sha256": "df2494349a83467eebf8b2464cff991744cebf225d094ff4bf1f9913edcc426d",
+      "size": 2843,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/rpc/__pycache__/config.cpython-38.pyc": {
+      "sha256": "2c639e3fc5211aeadf31023b89ff5ffadcd581da203f0382f1c1f1a77a0cef72",
+      "size": 4712,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/rpc/__pycache__/helpers.cpython-38.pyc": {
+      "sha256": "88c3bcd483f990f11a9e1c4d17e3cfcd88f160bd78228bedf7ce8b13436dd134",
+      "size": 2344,
+      "kind": "config"
+    },
+    "CubeS3lvol/scripts/python/spdk/rpc/client.py": {
+      "sha256": "3e513f4aa895f4b1392887f1b538584b5b978b6292b83411d7b29f17fa048491",
+      "size": 13444,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/rpc/cmd_parser.py": {
+      "sha256": "b3be51141d9e5a7e94e4961df700d60295c508cbbf61243ac163fd4b75f5b27a",
+      "size": 1485,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/rpc/config.py": {
+      "sha256": "5c7d067301154d26ab3da87c3dc5a006cfd924696a766d49b01045a85b8bedb1",
+      "size": 6343,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/rpc/helpers.py": {
+      "sha256": "ac17b14fe78f7eedceddf8cb6692aa628646942d4f430674242ac9b2cae2cba1",
+      "size": 1988,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/python/spdk/version.py": {
+      "sha256": "b28c9ed60919d2b58d8e5f91bbf5e4b61d045763e3b692e09bd18d2eced248c9",
+      "size": 24,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/rcow_common.sh": {
+      "sha256": "988b7e073f1bd7d80f20e102747e0c1627d0eb3bfc5143d5c366ea2f05268d2f",
+      "size": 58140,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/rcow_purge.sh": {
+      "sha256": "3913ad81b99ddd4463cfe79d509415272c514cbe58a379504c09d392f23dc4d9",
+      "size": 13746,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/rcow_recovery.sh": {
+      "sha256": "72219ef79036836ce6180f271dc133f0b77375c73b589594805d2d6bea661960",
+      "size": 5689,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/rcow_start.sh": {
+      "sha256": "e674bb88c03d706755dc4fb744521c99d04f00400bc524e52ec69ec01f106cdc",
+      "size": 19315,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/rcow_stop.sh": {
+      "sha256": "fbc5985f13b822f921e2ac07a904f2338b0e16a80f415fc7391374fc72d611bd",
+      "size": 7870,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/rpc.py": {
+      "sha256": "c9a657ea07e4d40dc0bc45e0cd6dd3c2ecfca4b7d64c1c46b87cf4fe6a39f4d7",
+      "size": 2418,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/rpc_compat.py": {
+      "sha256": "25eed82352709d85bbbf0d769bd3b8a49e25dfb1a896861e1a780d5c08f1dbe0",
+      "size": 1904,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/s3_bucket.py": {
+      "sha256": "1277b3b073e8dce38c2201fc9fc6d0c32022557360bea3992c5a076624109206",
+      "size": 9285,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/s3_prefix_rm.py": {
+      "sha256": "e27b56eb670cc7a90311fd2b80f8c89663c3e5c9ea5f3d42377bbc1475923024",
+      "size": 10207,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/s3lvol_rpc.py": {
+      "sha256": "7c57debcc161cdcf3c777f6f7d01a3470fd18c2c4dc2141ca8798ae7cc6725b5",
+      "size": 14780,
+      "kind": "script"
+    },
+    "CubeS3lvol/scripts/spdk_rpc.py": {
+      "sha256": "b9274fc8a07d1181d6142f6ecc9a7fbee8b810d1aee65e9bb66c96f19c61c380",
+      "size": 8992,
+      "kind": "script"
+    },
+    "CubeS3lvol/version": {
+      "sha256": "b2ae33e91d1e6bed5017e0334ea2d353c7954493bfabe28bce65813208704d02",
+      "size": 13,
+      "kind": "config"
+    },
+    "CubeTemplateCenter/Dockerfile": {
+      "sha256": "ea99c72760ffed31f9ef520966bc310683cd6a708baf6826af13a1a1978b59d8",
+      "size": 3138,
+      "kind": "config"
+    },
+    "CubeTemplateCenter/bin/templatecenter": {
+      "sha256": "8a18b2f3e485f4b5734536a9382c0ee88b193c86f20a5dbc713cc7b96cf3ded3",
+      "size": 45297956,
+      "kind": "binary"
+    },
+    "CubeTemplateCenter/conf.yaml": {
+      "sha256": "11771dabbf068e3f165033687459b7b5234fdef0c7ee6d794b47ceaa4bed4886",
+      "size": 1821,
+      "kind": "config"
+    },
+    "Cubelet/bin/cubecli": {
+      "sha256": "3944214bf7fe5f17ed3b39ed7754ac3332acee9a70564e236d46d31929fda860",
+      "size": 48451912,
+      "kind": "binary"
+    },
+    "Cubelet/bin/cubelet": {
+      "sha256": "594a4d8c68395d0af744b6e86d43456889c0a6800bfed475779b5ecb1a7b8f00",
+      "size": 73218912,
+      "kind": "binary"
+    },
+    "Cubelet/bin/cubelet-code-deploy.sh": {
+      "sha256": "c243517e173861f198b347641a87bcbfe6557160af5ee45bb2d0632270d20581",
+      "size": 494,
+      "kind": "script"
+    },
+    "Cubelet/bin/nicl": {
+      "sha256": "51efae628ec0e20bc30fb24d1d38d5cc683fa357eae86d32d8dba34ac1e55725",
+      "size": 5510,
+      "kind": "config"
+    },
+    "Cubelet/config/config.toml": {
+      "sha256": "7fc933d9b7bd03452c27c01ba10cbe58631ba7dcb2ab4c66317d0f9877d05755",
+      "size": 8663,
+      "kind": "config"
+    },
+    "Cubelet/config/plugin.conf": {
+      "sha256": "6ab53739d8112924255c2b7afd07e5f4ca88defb5b2ae0dde232130205bdb9f7",
+      "size": 1407,
+      "kind": "config"
+    },
+    "Cubelet/config/snapshot.sh": {
+      "sha256": "16b6609aa2f9ebdd8133798190a92703daa7a2dec592b8aca3a939ed04ea7fcf",
+      "size": 1763,
+      "kind": "script"
+    },
+    "Cubelet/dynamicconf/conf.yaml": {
+      "sha256": "3f43f1228afe4c293b9a5b1425501bc2bb4a5ea4080f6ce76d19ba35248c273b",
+      "size": 2312,
+      "kind": "config"
+    },
+    "Cubelet/dynamicconf/resource.conf": {
+      "sha256": "fa5f7d300fb6f16168006d50bc0d68cf5037d9b6055f92c2f27e1f6b081b5632",
+      "size": 469,
+      "kind": "config"
+    },
+    "Cubelet/plugin/cube-volume-cos": {
+      "sha256": "203fee3bc26f0d70285e864697370e986b8997c06b19d61dd8da1e4a11a5938a",
+      "size": 15960,
+      "kind": "config"
+    },
+    "Cubelet/plugin/cube-volume-s3": {
+      "sha256": "822748e25ccdd62d29f415994bb70082b8ae9cd8445f3fa678fccf2b5bbd729e",
+      "size": 7700664,
+      "kind": "binary"
+    },
+    "Cubelet/plugin/install-deps.sh": {
+      "sha256": "a56ff68470099bf74af4a17e1213b2e711e8bccb3bbb4fc0c7ea2ac258908eb1",
+      "size": 14361,
+      "kind": "script"
+    },
+    "Cubelet/plugin/install-s3-deps.sh": {
+      "sha256": "3a3de5e193c4c865c370f800b7aeedf38084f80b660019c312ffede25ba9d85b",
+      "size": 4880,
+      "kind": "script"
+    },
+    "Cubelet/plugin/volume-cos.conf.example": {
+      "sha256": "bfb75d4310742dde49b58e12faffcda0f57509012d1494aad200ce631328b773",
+      "size": 570,
+      "kind": "config"
+    },
+    "Cubelet/plugin/volume-s3.conf.example": {
+      "sha256": "de4e99379c29c51e77284f9bd20fca07d54871597cb3eeca7afb447608cd43e9",
+      "size": 1375,
+      "kind": "config"
+    },
+    "VERSION.txt": {
+      "sha256": "ba5cdc33f82f1c2f2a0c457c093b2bb9ec003aecfbf38b670b60e7967809fc30",
+      "size": 142,
+      "kind": "config"
+    },
+    "coredns/Corefile.template": {
+      "sha256": "65a451f7729b590db1f519408020689b87e9eb41fcdea7d58058e2e5a7847b49",
+      "size": 342,
+      "kind": "config"
+    },
+    "coredns/docker-compose.yaml.template": {
+      "sha256": "2c40c9c6ea0797e55b402cadc2eeacb0763f05434164290762c43301a05de68e",
+      "size": 349,
+      "kind": "config"
+    },
+    "cube-agent/cube-agent.ext4": {
+      "sha256": "deb7abfb9003f6b7d7de803ef2086c984ea8d8be0ea6dc7ff96c8ff7b0057df3",
+      "size": 23068672,
+      "kind": "binary"
+    },
+    "cube-agent/version": {
+      "sha256": "dd5bfb858c63ba44ee33de4e8be272f6bb88529dd80262394bf6088d0b50b305",
+      "size": 7,
+      "kind": "config"
+    },
+    "cube-egress/version": {
+      "sha256": "b2ae33e91d1e6bed5017e0334ea2d353c7954493bfabe28bce65813208704d02",
+      "size": 13,
+      "kind": "config"
+    },
+    "cube-image/cube-guest-image-cpu.img": {
+      "sha256": "8262a7eb9cacf423ea9c03f6bf3ae8921b00684f4a18022fe11792b37ea69228",
+      "size": 243269632,
+      "kind": "binary"
+    },
+    "cube-image/version": {
+      "sha256": "96b0c9635cbb23f0a38ae7ec93ea744e99a70ec9da0f496b92e31117648c7036",
+      "size": 21,
+      "kind": "config"
+    },
+    "cube-kernel-scf/version": {
+      "sha256": "3cd1be6d9b73a44bce6117b42d1fa8a3e2fc34cfb775524ab7721c067ef884e8",
+      "size": 72,
+      "kind": "config"
+    },
+    "cube-kernel-scf/version.json": {
+      "sha256": "9768a4a5ade0719d8a3e319e32dafe173ea7684e08460d114d75d4fc555f4a45",
+      "size": 323,
+      "kind": "config"
+    },
+    "cube-kernel-scf/vmlinux-bm": {
+      "sha256": "3ea4a05e2b74e1b4baaafb21875c9ce0dde8fdfc435723f6c39a98735a64a5a4",
+      "size": 50807064,
+      "kind": "binary"
+    },
+    "cube-kernel-scf/vmlinux-pvm": {
+      "sha256": "f9ecd86a05ddefc56dc6ae4b5c3448bb6c96c46ccc82fe344c5199560d7adb71",
+      "size": 52329616,
+      "kind": "binary"
+    },
+    "cube-lifecycle-manager/docker-compose.yaml.template": {
+      "sha256": "d76e1f34a6c46e577251eccf31a465b28634fcce986b62ebed5e06147f3b0459",
+      "size": 1431,
+      "kind": "config"
+    },
+    "cube-shim/bin/containerd-shim-cube-rs": {
+      "sha256": "d72fa20dfc78c81e46ac3db3ee45b3216d9ad68e7627f4685ecd1f73e9cb13a1",
+      "size": 15161688,
+      "kind": "binary"
+    },
+    "cube-shim/bin/cube-runtime": {
+      "sha256": "8676d2a1a1cd79c46f22d3b4b8519e23b0d5800aec42fde8b4a98e011ef527e3",
+      "size": 9511608,
+      "kind": "binary"
+    },
+    "cube-shim/conf/config-cube.toml": {
+      "sha256": "07bc7d16048f882ab2fa4a19857dabb0370e415081bc5a13db56114f011e567b",
+      "size": 1258,
+      "kind": "config"
+    },
+    "cube-vs/network/bin/cubevsmapdump": {
+      "sha256": "46a640dd3c44062b4af6ba326575e60404edc193a4ad76440dec465f7a13afea",
+      "size": 5220196,
+      "kind": "binary"
+    },
+    "cubeproxy/build-context/Dockerfile": {
+      "sha256": "f0b684559ef82c92db7d89d6f2ec114f621d2275208d9ace369738604da58c22",
+      "size": 1229,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/conf/includes/envd_streaming_host_route.inc": {
+      "sha256": "f7b7eba741b01ba40e62468aaadb0e55d494f1548b356e1b832bc970af9b4980",
+      "size": 901,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/conf/includes/envd_streaming_path_route.inc": {
+      "sha256": "801d85a13c6c92b6779658cbfe83ffdb997f0501b5cb39afd54a48b973b1006d",
+      "size": 1105,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/conf/includes/resolver.inc": {
+      "sha256": "bf5c803a7302786b4b8bc9563a84eec9c817442dc1933390975e18d91f8e8eb8",
+      "size": 107,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/lua/admin_phase.lua": {
+      "sha256": "35f612d08481043aa6b8a4ae89b1c528a531996dc75c0b20f575d4bd4067300d",
+      "size": 9120,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/lua/backend_cache.lua": {
+      "sha256": "c1e06655e5cb576cdb7c720b095d157273bc837b65ac080e23960fef2b3cfb49",
+      "size": 1535,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/lua/balancer_phase.lua": {
+      "sha256": "b725bc51d87e5bb413b873e51c2ebd43de050cfe9925c0d46eaf1390dc45acbb",
+      "size": 574,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/lua/header_filter_phase.lua": {
+      "sha256": "92afadf79cc0fe86c99c4f10b845ec42224c47d36d47bb56b2c011684838f33e",
+      "size": 65,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/lua/init_worker_phase.lua": {
+      "sha256": "232381a6263e3febe23962b699a9aba46e4cf475808bba9ec81eab98ce04b56c",
+      "size": 1831,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/lua/log_phase.lua": {
+      "sha256": "14c44fc1497982e13d1c30181f2d7db5a31098cd6624f720c7e8e7236696add7",
+      "size": 2809,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/lua/path_rewrite_phase.lua": {
+      "sha256": "5b7381a77253210ed303ac3e7bf922c6082bb8dd9bf3c75cc35154e038a9b0ec",
+      "size": 1797,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/lua/proxy_registry.lua": {
+      "sha256": "01341e20522cc5c766c3d4534391b7d689b74e8697346d5b056696b4088af6be",
+      "size": 5023,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/lua/redis_iresty.lua": {
+      "sha256": "e385b47d33af980299f1108399fe31a0d7d626fc57a5305f4da91083bf905771",
+      "size": 14182,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/lua/redis_keys.lua": {
+      "sha256": "7da5d75076cf56aa706907fb40a2e5a6acac9138af1831e6bd809914b24da7f2",
+      "size": 902,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/lua/request_host.lua": {
+      "sha256": "9270b9b7be01552137b0eb73536603a34855378043b1d2f4c6d49dfd088b9be1",
+      "size": 1414,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/lua/rewrite_phase.lua": {
+      "sha256": "a7fc60b3c6699712c9dc9da6ffe799764033d8a023ff99f6368ac7a37a1f00a0",
+      "size": 1666,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/lua/sandbox_backend.lua": {
+      "sha256": "6d82aaa87c2c07a62608e7b8ef267fd020587071f92288e5293f343a4855714e",
+      "size": 11626,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/lua/sandbox_state.lua": {
+      "sha256": "eb5128bf0b95b3dedf288fdaa1cdd5d0b256eef0b98c57b2bb80da9ddb7329de",
+      "size": 5464,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/lua/utils.lua": {
+      "sha256": "492fe3dcd8e3c00234347de901b6991bdce5f8364d9e4505a9b398268982102e",
+      "size": 3402,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/nginx.conf": {
+      "sha256": "03b48aacc04fb206361cbc9f405a3477c860f277cc9f666da792c9ad9beadc90",
+      "size": 21019,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/root": {
+      "sha256": "5dbb61e64c21a4ff03add3303df420dd8506919f30d2988fd6576bdc7241dd78",
+      "size": 522,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/rotate_nginx_log.sh": {
+      "sha256": "d5af50f2f0b8354d0b15950bf54dadef3f75b1f7ecc2d59a2d965bb81a0b4df5",
+      "size": 734,
+      "kind": "script"
+    },
+    "cubeproxy/build-context/start.sh": {
+      "sha256": "4433bcd31cbf04f41b930155f2a35c823334b8f33117175f642a6438629d3f1b",
+      "size": 7688,
+      "kind": "script"
+    },
+    "cubeproxy/build-context/tests/backend_cache_test.lua": {
+      "sha256": "4cf82e4091e4bcf1037e384c0d72e94515e56266b12301689a495959a5ced103",
+      "size": 2085,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/tests/redis_iresty_sentinel_test.lua": {
+      "sha256": "88cd6db43f0801abb307929b3a961770d0deb09433d41f5777f997813108f2a5",
+      "size": 6209,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/tests/request_host_test.lua": {
+      "sha256": "977acbb14f47fb2e2b56e80412cb24eddbdaa7f71958a22d592c5aa3623eae93",
+      "size": 1954,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/tests/sandbox_backend_cache_test.lua": {
+      "sha256": "0e6280a626e273b6b2a764609f286c6995906dfae7e6267b6e97f61d76f18a12",
+      "size": 6168,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/tests/sandbox_route_lookup_test.lua": {
+      "sha256": "28c919c08e251ed2f6e2147ba1659c1969b66ca7d0e264211c6a897365b119fe",
+      "size": 3761,
+      "kind": "config"
+    },
+    "cubeproxy/build-context/tests/test_admin_access_log.sh": {
+      "sha256": "7937bdacd7d5405a6bc2858431c5291869ed07d114d6433bc2a35a9d19097c76",
+      "size": 1691,
+      "kind": "script"
+    },
+    "cubeproxy/build-context/tests/test_lua_syntax.sh": {
+      "sha256": "394f41497c72b4ff598672945a567a225d22a1a2249c223da72e8f29fcaeb0c0",
+      "size": 1680,
+      "kind": "script"
+    },
+    "cubeproxy/build-context/tests/test_start.sh": {
+      "sha256": "2a2179903f2ed690e7d1ce77ca2b29a7e478a94a89781e655c377c7361fd57fb",
+      "size": 19744,
+      "kind": "script"
+    },
+    "cubeproxy/docker-compose.yaml.template": {
+      "sha256": "13b8d8176ae17afd645c515bb0c2777a253fecde2826dafccff7b5ab45d6194e",
+      "size": 1752,
+      "kind": "config"
+    },
+    "cubeproxy/global.conf.template": {
+      "sha256": "fe59b8ebddc2e3738538bc619d9be4d6b3b0c0599f9316c788fcef81f177fecb",
+      "size": 1015,
+      "kind": "config"
+    },
+    "cubeproxy/nginx.conf.template": {
+      "sha256": "7af9b78ed58b7778252a957d3bcda5bf48d6917c3b593749df6239d6850d2750",
+      "size": 22096,
+      "kind": "config"
+    },
+    "release-manifest.json": {
+      "sha256": "caecdcc77b758a238b4a5acc1b56c183c23de6ef6004edfdfa73fc9de175bb37",
+      "size": 4141,
+      "kind": "config"
+    },
+    "scripts/common/cubelet_config.sh": {
+      "sha256": "c5d3837691188a486630d57d5c1ec3c5b34b3f50cf1e4e212914e53065d0cbf0",
+      "size": 5722,
+      "kind": "script"
+    },
+    "scripts/common/validation.sh": {
+      "sha256": "00a9c79b756aa621d63db5e77d3f1bc046d61ee29be295541ebc3dc4f45d49b4",
+      "size": 1631,
+      "kind": "script"
+    },
+    "scripts/cube-diag/check-deps.sh": {
+      "sha256": "14462339eb3848769b243f0be9de9914e9f8ccbef82205eeaa741d28e350f78e",
+      "size": 14123,
+      "kind": "script"
+    },
+    "scripts/cube-diag/check-procs.sh": {
+      "sha256": "89fdff28ff51b63b5d87586b5ac1ffbd31f101f37f02c8edee14d4221c2d66b6",
+      "size": 17452,
+      "kind": "script"
+    },
+    "scripts/cube-diag/collect-logs.sh": {
+      "sha256": "0dbee3ba6b005ec48c89621ab322f311b7a66511713432a41493376478bd05bf",
+      "size": 15612,
+      "kind": "script"
+    },
+    "scripts/cube-diag/cube-check.sh": {
+      "sha256": "43e79f221b9b46007dbdd357dee5e6357d94f9c83b8805782b7e151df3ee0142",
+      "size": 10933,
+      "kind": "script"
+    },
+    "scripts/cube-egress/cube-proxy-iptables-init.sh": {
+      "sha256": "c8fc2244fe43ad4f34c54c170df4d83c00d20e7e3acbd011db3c6e236a36ed36",
+      "size": 11869,
+      "kind": "script"
+    },
+    "scripts/one-click/common.sh": {
+      "sha256": "ba69c7d68ca38cc6af7d8615de9ab37ae14fadf821afecf0b0f4098bc4cf0173",
+      "size": 11406,
+      "kind": "script"
+    },
+    "scripts/one-click/compose-lib.sh": {
+      "sha256": "7e936e393ceffebe3fa5f67866071e0abbff27fb82e49784d25a8bf79d0f7251",
+      "size": 853,
+      "kind": "script"
+    },
+    "scripts/one-click/coredns-compose-lib.sh": {
+      "sha256": "99d3bf2c9af5d61c268128444e6eb2cbfdcb9ee2f124768b95b70900291f39fa",
+      "size": 920,
+      "kind": "script"
+    },
+    "scripts/one-click/cube-lifecycle-manager-compose-lib.sh": {
+      "sha256": "be9f64f0eed3f3a009efdbee23bae9ef51cf68855fe861537c1458a7c1525215",
+      "size": 1037,
+      "kind": "script"
+    },
+    "scripts/one-click/down-compute.sh": {
+      "sha256": "4e1071bd448318011217ef7ebf2ba73a8505a6343555515203764f37c20b33c9",
+      "size": 307,
+      "kind": "script"
+    },
+    "scripts/one-click/down-cube-egress.sh": {
+      "sha256": "48227ffdfc462b7d19c362c1408d420ab28160ffa21fa13a78947f51963091a5",
+      "size": 729,
+      "kind": "script"
+    },
+    "scripts/one-click/down-cube-lifecycle-manager.sh": {
+      "sha256": "e5f4e436173010e45ce0fa367a56217589294e92d495cccbbc9110943e6479ec",
+      "size": 748,
+      "kind": "script"
+    },
+    "scripts/one-click/down-cube-proxy.sh": {
+      "sha256": "e58f82acf601b27f85c5d871674871ef014b6ee8732a0b084aecc1fefa9798da",
+      "size": 799,
+      "kind": "script"
+    },
+    "scripts/one-click/down-dns.sh": {
+      "sha256": "e874e51cea489419e49330ac94bc504ad8afb7fbd113c2c7ccfcf55c22164d06",
+      "size": 4864,
+      "kind": "script"
+    },
+    "scripts/one-click/down-local.sh": {
+      "sha256": "bb93a0abcc025bf54223b730b8fce81406a2d72ede589a7eac250784d002b1c0",
+      "size": 401,
+      "kind": "script"
+    },
+    "scripts/one-click/down-support.sh": {
+      "sha256": "6ea5456cc165e8b9586d155f0cf731fe38a4f77ca77c5989085f2540871f93ab",
+      "size": 1072,
+      "kind": "script"
+    },
+    "scripts/one-click/down-webui.sh": {
+      "sha256": "b66d2c495b4832069928b592c097fb303d990e633b26ac3a00ef25b47c30a2fd",
+      "size": 694,
+      "kind": "script"
+    },
+    "scripts/one-click/down-with-deps.sh": {
+      "sha256": "93e602e0d659eb6cfa5fd140ca228f7a1ea446df072c1eb8ba79fdd67359f65b",
+      "size": 731,
+      "kind": "script"
+    },
+    "scripts/one-click/quickcheck.sh": {
+      "sha256": "279b1a93c7867e8c52d587da4e2f9e4057024fe13775d8bb63edfb102be314d1",
+      "size": 22673,
+      "kind": "script"
+    },
+    "scripts/one-click/support-compose-lib.sh": {
+      "sha256": "b416c56406063cb9eac9b91d5f1d50449662ce0e5c827a4afac3d39208d698ba",
+      "size": 920,
+      "kind": "script"
+    },
+    "scripts/one-click/up-compute.sh": {
+      "sha256": "b90bb6264cfcb4ef4172301bdb29bf73887b730f28be76aaa405048dc77751d5",
+      "size": 2792,
+      "kind": "script"
+    },
+    "scripts/one-click/up-cube-egress.sh": {
+      "sha256": "e54ae749381d6b6140fd58e230ff6f4f3fb6512ce230894f7443a5e866b8d60a",
+      "size": 1205,
+      "kind": "script"
+    },
+    "scripts/one-click/up-cube-lifecycle-manager.sh": {
+      "sha256": "4bee2780327d76c69115b839637dea164493b60ddacdb8f40b56f3bb2abacb91",
+      "size": 7718,
+      "kind": "script"
+    },
+    "scripts/one-click/up-cube-proxy.sh": {
+      "sha256": "f6f6a25af4f1ddc694b7edd768e385da3dba911cd002788b5462f8b45726a8de",
+      "size": 16581,
+      "kind": "script"
+    },
+    "scripts/one-click/up-dns.sh": {
+      "sha256": "a412df5a99b7b6150d165b9ea4ec2633997d2a0a7a6c8cc34af6514286a30491",
+      "size": 11229,
+      "kind": "script"
+    },
+    "scripts/one-click/up-support.sh": {
+      "sha256": "f234d3a74ca3b5956709e557f65d719b5b14ac8b10d0813719a2adbd9e829887",
+      "size": 9622,
+      "kind": "script"
+    },
+    "scripts/one-click/up-webui.sh": {
+      "sha256": "7aad0381b8bd29c9b72fe59761937533e428806ec3d61ab33adc541305ff8cb6",
+      "size": 5210,
+      "kind": "script"
+    },
+    "scripts/one-click/up-with-deps.sh": {
+      "sha256": "5ce7562011fb2600a8ad29df9fc2c83947db001a37f709f2b89ad8df578c68f5",
+      "size": 2063,
+      "kind": "script"
+    },
+    "scripts/one-click/up.sh": {
+      "sha256": "478bf5afdf648d8d43ab619449e70efe36e55cd705e79bd1938b4c423fd63a4b",
+      "size": 4469,
+      "kind": "script"
+    },
+    "scripts/one-click/webui-compose-lib.sh": {
+      "sha256": "765d9715876ebe56be9bf6f55156358025289b86cdcc2a87bc30d63c87feac09",
+      "size": 982,
+      "kind": "script"
+    },
+    "scripts/systemd/common.sh": {
+      "sha256": "8fcbdb821e264950da849f87b1792a11bf0d3a2e28a81871be19b251464cc6b4",
+      "size": 13107,
+      "kind": "script"
+    },
+    "scripts/systemd/coredns-postcheck.sh": {
+      "sha256": "f0ce9af7ad80e91cd7e87a9952a7fa87ada8dbfe7b9f9adea164e9a4178f948e",
+      "size": 640,
+      "kind": "script"
+    },
+    "scripts/systemd/coredns-prepare.sh": {
+      "sha256": "d39c3e0fd3d043bb94c80638236692736b4355bf9cab5ea37698e61c77f3cc1f",
+      "size": 405,
+      "kind": "script"
+    },
+    "scripts/systemd/coredns-start.sh": {
+      "sha256": "e31ba38d9224bf38b1b2959fb2f109b795d2b41f4d4f2fb7fc9f9ee6f77ef58a",
+      "size": 4926,
+      "kind": "script"
+    },
+    "scripts/systemd/coredns-stop.sh": {
+      "sha256": "b7d729a134349f2fddb8db52416f6f056519ffaeef462aed5baa6c2c40e0f67e",
+      "size": 833,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-api-postcheck.sh": {
+      "sha256": "cd0787ce2fb553bad9a801b1087982ad43a3657b03e8585ee197ca4322c46e11",
+      "size": 240,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-api-start.sh": {
+      "sha256": "5abe731225cddf1e4b5765bde778f6d81c3129830139ee0a3c71d1dc85df9f38",
+      "size": 1296,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-egress-net-start.sh": {
+      "sha256": "e9fd446d87235c7a2775751320f36dd73a276859f9270b6bda1997a8fa69368e",
+      "size": 1893,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-egress-net-stop.sh": {
+      "sha256": "9d35cd94b1543e7f4e65f88d09e1319bab3b386015c56ae4438e8d8d270d65e0",
+      "size": 566,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-egress-postcheck.sh": {
+      "sha256": "ad7401c1a9eeddcc52e8e56cfc251ecb3b78c0dc5e6d596dc242ba93737fb050",
+      "size": 1232,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-egress-prepare.sh": {
+      "sha256": "cdfc1258a09e0be9f48954477163c19b04e2a68f2b9c9dfe55d8f6cda9a469e3",
+      "size": 8860,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-egress-start.sh": {
+      "sha256": "4c794f447b6ab4c44bd13f5bea58fffdf25106a5bb6049827f77fc290c6ea5c4",
+      "size": 4915,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-egress-stop.sh": {
+      "sha256": "c085f38fdff813e05e015ceead5e5ebef6e1ad0e302836a9a91b6d4bebac6f62",
+      "size": 681,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-lifecycle-manager-prepare.sh": {
+      "sha256": "b6097594e61514c2f828817f104601fb8fc41646af9898c32402a5987874faee",
+      "size": 419,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-lifecycle-manager-start.sh": {
+      "sha256": "897dc2955271e7cf18e241237fedec019ce1c9a4cafc493431b1665084536992",
+      "size": 421,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-lifecycle-manager-stop.sh": {
+      "sha256": "dcfd1d7d14c199185799dd227fb3a916b5adcadd3ed2bbf2e508f26f679c4ed3",
+      "size": 392,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-proxy-postcheck.sh": {
+      "sha256": "1da5faa327ddbb03983128d5264a8074be1c86dff57895232ae7333efee6c153",
+      "size": 1321,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-proxy-prepare.sh": {
+      "sha256": "78072559c966c7180087a954f9fe8bd009258cd8af7ceec931bcf1b17c43f667",
+      "size": 407,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-proxy-start.sh": {
+      "sha256": "c8d0ca2fc5d4311c17d87416afef545a4db6ae885ceff3972e6bd308f77883be",
+      "size": 409,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-proxy-stop.sh": {
+      "sha256": "5ee1080b4d35d654a2a44ccb79e101f18ac309ac3a37037955188f153d255994",
+      "size": 380,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-s3lvol-stop.sh": {
+      "sha256": "7437b56c7b2111e2a155d296584a1fd6c93df362c2e927afb0f9492c83005e6c",
+      "size": 1995,
+      "kind": "script"
+    },
+    "scripts/systemd/cube-s3lvol-supervise.sh": {
+      "sha256": "b0baa611880f864d9fc0d7ad94e63db5aafeffe8a8a6ff9220bcf04e6febbc7b",
+      "size": 3796,
+      "kind": "script"
+    },
+    "scripts/systemd/cubelet-start.sh": {
+      "sha256": "df2a4c6e35dc6e2cba56d9f61dc0465ebf34919d8acb0741164defd0f05d5f4e",
+      "size": 2000,
+      "kind": "script"
+    },
+    "scripts/systemd/cubelet-stop.sh": {
+      "sha256": "479017c6013a6421891722ffda7cf5d3edc0b61fa87774ec569d214f5c7daf40",
+      "size": 904,
+      "kind": "script"
+    },
+    "scripts/systemd/cubemaster-postcheck.sh": {
+      "sha256": "2d0ecd74da74e48247e2891ab85a8cee7c6b52f50f3148d43ea636e2a37d5f3c",
+      "size": 244,
+      "kind": "script"
+    },
+    "scripts/systemd/cubemaster-start.sh": {
+      "sha256": "608ef8b0643691a9aeaa6ccd1eab871eb01415dceca628de7470df171d992da7",
+      "size": 1670,
+      "kind": "script"
+    },
+    "scripts/systemd/cubeops-postcheck.sh": {
+      "sha256": "c63f5661bf27765aa687d8c45a9e700e65618c9d799d4b7904e37557e112461a",
+      "size": 459,
+      "kind": "script"
+    },
+    "scripts/systemd/cubeops-start.sh": {
+      "sha256": "7465231588256b2b61726827b20e7cfe148e698c2de727ad3a1faabf3c5fe9a3",
+      "size": 4157,
+      "kind": "script"
+    },
+    "scripts/systemd/cubetemplatecenter-postcheck.sh": {
+      "sha256": "c14830a9ebc229376a9394071ef25f0090358003a46efad3ec34e5227eaa45e7",
+      "size": 483,
+      "kind": "script"
+    },
+    "scripts/systemd/cubetemplatecenter-start.sh": {
+      "sha256": "f48af9b399bcde55ad7ef48f03d5e2adb11661a61e71f4d63f8456d3823fa54f",
+      "size": 5895,
+      "kind": "script"
+    },
+    "scripts/systemd/dns-host-route-down.sh": {
+      "sha256": "67bf2e3ca09b30ed0aa0863dda489363c1971488cbe4b2f4e0ba89115834a4a1",
+      "size": 5902,
+      "kind": "script"
+    },
+    "scripts/systemd/dns-host-route-up.sh": {
+      "sha256": "5ca18198e5f5d2907883bd83847bbe2f39c260324895fedf5719b5a91d6d9b21",
+      "size": 14616,
+      "kind": "script"
+    },
+    "scripts/systemd/install-units.sh": {
+      "sha256": "082b0d285c4ed52ce42720a40ca6cb323db6863a8da034d326b220652ac5ef35",
+      "size": 696,
+      "kind": "script"
+    },
+    "scripts/systemd/minio-postcheck.sh": {
+      "sha256": "ff1b4ff2cb373bb66c786f6dfba91a60afc74bffe77be2884ab56436934dedfe",
+      "size": 924,
+      "kind": "script"
+    },
+    "scripts/systemd/minio-prepare.sh": {
+      "sha256": "402c25ddf8c997365d31fd7b2e355df00732a4cd8293c90df370f302531a4d4f",
+      "size": 441,
+      "kind": "script"
+    },
+    "scripts/systemd/minio-start.sh": {
+      "sha256": "aa563a7a00e586e8135a1e330b34ac94d4350152a00ac047f4d0babf84a49072",
+      "size": 443,
+      "kind": "script"
+    },
+    "scripts/systemd/minio-stop.sh": {
+      "sha256": "9a8bc724b173d5e10b999ce08d936c44afaf8ecfa89cc504ed82cf602436fdf3",
+      "size": 414,
+      "kind": "script"
+    },
+    "scripts/systemd/mysql-postcheck.sh": {
+      "sha256": "4d19a4ece7c7b29e226899e7354c9030d41200457b0a313f8dbca9f8e756d1c9",
+      "size": 575,
+      "kind": "script"
+    },
+    "scripts/systemd/mysql-prepare.sh": {
+      "sha256": "4dfac68dc2c46a21f3ac09bb877db7f474d92c9f00fa240dff3dad64033030dd",
+      "size": 441,
+      "kind": "script"
+    },
+    "scripts/systemd/mysql-start.sh": {
+      "sha256": "7c487551924e511a995e0872354c759b7c7aee2004e7e6141cee9d91ecc71f1a",
+      "size": 443,
+      "kind": "script"
+    },
+    "scripts/systemd/mysql-stop.sh": {
+      "sha256": "dde0e0c0a454b7831b8c12aa7d86cc6146b154e1eef9549b1981f40a5c58f570",
+      "size": 414,
+      "kind": "script"
+    },
+    "scripts/systemd/not-implemented.sh": {
+      "sha256": "73707afe275e9cf41f1ac0844544f42996c097d12cb26a12ae3382b0eb1bac04",
+      "size": 382,
+      "kind": "script"
+    },
+    "scripts/systemd/prepare-compute-role.sh": {
+      "sha256": "4be00b56788681c2918a1d42aecde0a39a5b9a7222667a403dec28ff2226e2e4",
+      "size": 2022,
+      "kind": "script"
+    },
+    "scripts/systemd/redis-postcheck.sh": {
+      "sha256": "46067e1e2a5095832f295ab9a1e82094967f2fef21e2c20c2602f9c55116064d",
+      "size": 563,
+      "kind": "script"
+    },
+    "scripts/systemd/redis-prepare.sh": {
+      "sha256": "c79f1bdc729ae33b0bff200530a245a979cdaf5b39dba669849a2811adf683a0",
+      "size": 441,
+      "kind": "script"
+    },
+    "scripts/systemd/redis-start.sh": {
+      "sha256": "7c0614302601b78761d7fca09d9fb47b7d28480d73196fd6e7024961569cc3b9",
+      "size": 443,
+      "kind": "script"
+    },
+    "scripts/systemd/redis-stop.sh": {
+      "sha256": "980edc64189d64f47d77ddb0d8758263d4bbb6485df2d123a602f48585afc29c",
+      "size": 414,
+      "kind": "script"
+    },
+    "scripts/systemd/remove-units.sh": {
+      "sha256": "6b78c9349ed035398011ebb56d50fefcc139ef30b5bd8a21896b5e1a4e6ad738",
+      "size": 846,
+      "kind": "script"
+    },
+    "scripts/systemd/wait-container-health.sh": {
+      "sha256": "2c1e3bb9bbb2acb500b215d570ac98be7e5e9465760e9ca3422d6623889bc06c",
+      "size": 490,
+      "kind": "script"
+    },
+    "scripts/systemd/wait-http.sh": {
+      "sha256": "3ff37a848677525301222eb89b4c5e393fae37738e29a1850f6511682d2f1ea1",
+      "size": 479,
+      "kind": "script"
+    },
+    "scripts/systemd/wait-tcp.sh": {
+      "sha256": "f1f9100aed48feec6662f1580fbbb2596fbb97f3287e159c3d61b2158b98a011",
+      "size": 435,
+      "kind": "script"
+    },
+    "scripts/systemd/webui-postcheck.sh": {
+      "sha256": "6b1e1c297317ae2f7a961ef23d0ee86ec582385cff2d2f5de667afd6ee0583e1",
+      "size": 498,
+      "kind": "script"
+    },
+    "scripts/systemd/webui-prepare.sh": {
+      "sha256": "da831be0fa1bffe6c41517b3cd21c6b93d371aced19be98348fbf07e200d0e08",
+      "size": 402,
+      "kind": "script"
+    },
+    "scripts/systemd/webui-start.sh": {
+      "sha256": "ee3cfc828cb926e232f21577c35b1df9019274da1e72325a7115c68e40bf878b",
+      "size": 404,
+      "kind": "script"
+    },
+    "scripts/systemd/webui-stop.sh": {
+      "sha256": "2505691cf501d47f2d4f18302f08572f4271bb47c7d6c6b9a6ba70515984673c",
+      "size": 375,
+      "kind": "script"
+    },
+    "support/bin/mkcert": {
+      "sha256": "6d31c65b03972c6dc4a14ab429f2928300518b26503f58723e532d1b0a3bbb52",
+      "size": 4788866,
+      "kind": "binary"
+    },
+    "support/docker-compose.yaml.template": {
+      "sha256": "ea44ad58f334e596a86590dea3114233aa86de42224ff37eb9902c908fb8f588",
+      "size": 1862,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-compute.target": {
+      "sha256": "4be21350e56fcc1de8a1772b758888b8bf73db454d08500391614e992425dcd6",
+      "size": 272,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-control.target": {
+      "sha256": "653837f8b1a813b9fe65d6db743a5b33d50932c3d68b5555f27d73c333e75277",
+      "size": 694,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-coredns.service": {
+      "sha256": "a6ce0c82da8cf99b14d4bbf18a7f3f304624fdb57092b037a4b14724cea695fa",
+      "size": 1053,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-cube-api.service": {
+      "sha256": "138677fe70e2b990befd3bf0370c79306c3e9c8070f98f3881050237a8ca0b78",
+      "size": 762,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-cube-egress-net.service": {
+      "sha256": "e3e7428151171bf62dd21429126d9d160c7ac65d4acc059aa001747154a1aff0",
+      "size": 742,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-cube-egress.service": {
+      "sha256": "1950cf6aff1502a28ef78006fd017d824cc791bb903c65c39804d787ee96aef5",
+      "size": 1599,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-cube-lifecycle-manager.service": {
+      "sha256": "5c2cc0c3e65557e6d90a680c5848d5421a3d8f21a028048792e708612b925f93",
+      "size": 1342,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-cube-proxy.service": {
+      "sha256": "8cedf13e97f66d658d753a9b34a1e31bd5039dbc158014a13776be4c17844f36",
+      "size": 1455,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-cube-templatecenter.service": {
+      "sha256": "5a30ed2cfd662fba1af8ae9711fd78452a23d44a53be544a0abb1c00d2f50217",
+      "size": 2085,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-cubelet.service": {
+      "sha256": "ef16504b8c51933757f1f13b2918cebd0865f21913be1bc1df50ff13f3064295",
+      "size": 949,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-cubemaster.service": {
+      "sha256": "a60ff292d77391da5dd9efe947efba165fdecd73348e559f2e7f64711470f46a",
+      "size": 1077,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-cubeops.service": {
+      "sha256": "a92ddd18983c651e949fc2121e849fc799e03cb49da6a729d3be409d8bed3550",
+      "size": 873,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-dns.service": {
+      "sha256": "eceb048d0accbfa84f6d2e1b9a68368939fd96299432eeb4f35f471a3e786d63",
+      "size": 1030,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-minio.service": {
+      "sha256": "b7f3ef1dd764716157b55ed8f269e458438177f6bc36a201dee739a9e37da94d",
+      "size": 871,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-mysql.service": {
+      "sha256": "58cd77937cf1022cf7f6438f5a7d630b4229a23acd9bcf92f2335ec2b9d186e5",
+      "size": 1012,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-redis.service": {
+      "sha256": "446ef9cc757bf343445e5be320867a34f884a10909b27daa86b17cc548d546fc",
+      "size": 915,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-s3lvol.service": {
+      "sha256": "a46b065f6df9df1a5f8fae67c2ef394533b9152454044e94bf93740a96f39994",
+      "size": 1310,
+      "kind": "config"
+    },
+    "systemd/cube-sandbox-webui.service": {
+      "sha256": "ea2e91d9348f32cb3047a4d6775d4884ca4c23aa43b87ec330a6d459422f71e2",
+      "size": 1038,
+      "kind": "config"
+    },
+    "terraform/tencentcloud/.gitignore": {
+      "sha256": "a2dc765efd5094d41e071981e838458b8792534f78814c1a49ee9b841dc20e9a",
+      "size": 620,
+      "kind": "config"
+    },
+    "terraform/tencentcloud/build_images.sh": {
+      "sha256": "2fb521aaaad31eceb37a67842d3037073c82b9548a1aa0563aa1b4de768a99e1",
+      "size": 12887,
+      "kind": "script"
+    },
+    "terraform/tencentcloud/create.sh": {
+      "sha256": "cad15b98a36a1fcd255b6a447c7dca17c5d8ff35cc676909b6e25e027a469251",
+      "size": 266395,
+      "kind": "script"
+    },
+    "terraform/tencentcloud/cubeproxy-nginx.conf": {
+      "sha256": "7af9b78ed58b7778252a957d3bcda5bf48d6917c3b593749df6239d6850d2750",
+      "size": 22096,
+      "kind": "config"
+    },
+    "terraform/tencentcloud/destroy.sh": {
+      "sha256": "cbe6f5729a426df4881cb9c483ed64a4b720650c55ce90ffc8305d0de88b7707",
+      "size": 76087,
+      "kind": "script"
+    },
+    "terraform/tencentcloud/env.example": {
+      "sha256": "28e8016718d0557c765244d4e56857bf70f931561c88ddbd42b18e770f177ffb",
+      "size": 6955,
+      "kind": "config"
+    },
+    "terraform/tencentcloud/lib-phases.sh": {
+      "sha256": "0acff710f28c78d4d2ee50338f51df3c8eb8729d92910f8cef36508cad812017",
+      "size": 4295,
+      "kind": "script"
+    },
+    "terraform/tencentcloud/lib-state-sync.sh": {
+      "sha256": "d9a9f6fdf242687034b7f8c860c7d76f007164c2ef7bfec6425393eff0da2a8d",
+      "size": 24901,
+      "kind": "script"
+    },
+    "terraform/tencentcloud/main.tf": {
+      "sha256": "8921c8c6605e74e56f2b8e36d304b895e902ed07c5acfda9e1d577cfad995883",
+      "size": 39207,
+      "kind": "config"
+    },
+    "terraform/tencentcloud/query_outputs.tf": {
+      "sha256": "0f1ca566f5de4e5a632cd877290036079e5fe356e69f5a1957862683e488452f",
+      "size": 2619,
+      "kind": "config"
+    },
+    "terraform/tencentcloud/tke-addons.tf": {
+      "sha256": "aeefd91441a5313b909869c6beaaf93390b917ab5c89e7035145d860552674d4",
+      "size": 67300,
+      "kind": "config"
+    },
+    "terraform/tencentcloud/validate.sh": {
+      "sha256": "246b92579f6dd0698ff1421b86ef39ae42d098cc0088bc4efbb3755ac3f790e0",
+      "size": 4252,
+      "kind": "script"
+    },
+    "terraform/tencentcloud/variables.tf": {
+      "sha256": "e005dcdfa74ff3a4b5eb062d05085bc04ff1bc41cfd788167793667046efefd4",
+      "size": 21641,
+      "kind": "config"
+    },
+    "terraform/tencentcloud/webui-nginx.conf": {
+      "sha256": "00fac1cc7dfc872b687d89d19b60a3dd2d08f61a38a57d9c74c12411208c78d5",
+      "size": 4894,
+      "kind": "config"
+    },
+    "webui/Dockerfile": {
+      "sha256": "546d098b52a7091d94a97e0b4f439317b5e24dc925254266e9a5b34020df5cfc",
+      "size": 5006,
+      "kind": "config"
+    },
+    "webui/Dockerfile.dockerignore": {
+      "sha256": "72f780d43ae0dd1c3da70d0f4725646e7170b4739d101d46c11a0e7403d00763",
+      "size": 1409,
+      "kind": "config"
+    },
+    "webui/Dockerfile.package": {
+      "sha256": "15493007b3e655f149b3a50de50962d27e704b2689f1d7a56d0daa30ca211af8",
+      "size": 3142,
+      "kind": "config"
+    },
+    "webui/dist/assets/cube-logo.svg": {
+      "sha256": "80f7e74bc53b7d038d33aeb025eff063f98c435c730d8bff89468d2587027b83",
+      "size": 2991,
+      "kind": "config"
+    },
+    "webui/dist/assets/cube.svg": {
+      "sha256": "55843cb8d30e750dd6477b2a559739cd221bda9def45bbff41ecb83adf6fa236",
+      "size": 6404,
+      "kind": "config"
+    },
+    "webui/dist/assets/index-3z31f7Nf.js": {
+      "sha256": "eee84dfde6fd88bfd404c537580f4f46bb0bfbfd4fe142cc0cc1dd6be62edf82",
+      "size": 785021,
+      "kind": "config"
+    },
+    "webui/dist/assets/index-KZALBuoO.css": {
+      "sha256": "afb42dbb35c2fa08baaea207653c76ba34d654c4fba1277f91d3a975ddaa540d",
+      "size": 64648,
+      "kind": "config"
+    },
+    "webui/dist/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2": {
+      "sha256": "ca157063339ac4ad418f214f3abfed119b0798ab4d377386ce5c9e5a7a435ebd",
+      "size": 25960,
+      "kind": "config"
+    },
+    "webui/dist/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2": {
+      "sha256": "71d5ee93cc1e9f1d520a3a8b66456de18c7879d8df09d57fcd2eaff75fef0075",
+      "size": 18748,
+      "kind": "config"
+    },
+    "webui/dist/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2": {
+      "sha256": "6e9e020a25f9b56d418f2c085b1d3c09725a4da23fe693a5b463064606732190",
+      "size": 11232,
+      "kind": "config"
+    },
+    "webui/dist/assets/inter-greek-wght-normal-CkhJZR-_.woff2": {
+      "sha256": "1be3448e292fbf05ffe176fe1e43f135013d50b1e7d324ad1a558f623d3bb6f6",
+      "size": 18996,
+      "kind": "config"
+    },
+    "webui/dist/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2": {
+      "sha256": "34b9c504cab7a73e37b746343a449132e56cf7b5481af2cb81dc74dcff25c956",
+      "size": 85068,
+      "kind": "config"
+    },
+    "webui/dist/assets/inter-latin-wght-normal-Dx4kXJAl.woff2": {
+      "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62",
+      "size": 48256,
+      "kind": "config"
+    },
+    "webui/dist/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2": {
+      "sha256": "5c66f9e07e90c6d4ac4922cc68d60de26c17b1858e677fb5e603fce3952b3ff2",
+      "size": 10252,
+      "kind": "config"
+    },
+    "webui/dist/assets/jetbrains-mono-cyrillic-wght-normal-D73BlboJ.woff2": {
+      "sha256": "d274604c40757f98f07df623a8b8fb5194508a6fa4f5413a7a107f09e3b7452a",
+      "size": 12108,
+      "kind": "config"
+    },
+    "webui/dist/assets/jetbrains-mono-greek-wght-normal-Bw9x6K1M.woff2": {
+      "sha256": "ee863198077f3093ffa81c072581cc4bd608a04e60a8a9c0b846396ce4f14109",
+      "size": 9004,
+      "kind": "config"
+    },
+    "webui/dist/assets/jetbrains-mono-latin-ext-wght-normal-DBQx-q_a.woff2": {
+      "sha256": "79bfdab9ba467e26eea4122e6f2567e188dd8a09a8c730d501fc487c4ab99c6e",
+      "size": 15196,
+      "kind": "config"
+    },
+    "webui/dist/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2": {
+      "sha256": "18be452724bfdc236c074ca94a249a7f41a86752c7d04ab258ce9ed5651f6a7e",
+      "size": 40404,
+      "kind": "config"
+    },
+    "webui/dist/assets/jetbrains-mono-vietnamese-wght-normal-Bt-aOZkq.woff2": {
+      "sha256": "2288795da89dd97e648954b96e22b4501bd85dfc453264460b252f888b582ca2",
+      "size": 7504,
+      "kind": "config"
+    },
+    "webui/dist/index.html": {
+      "sha256": "5706c0d03a80d883681d0b939a69d2aec4e6240aa6ff2ae2c5f2a19731ac70cf",
+      "size": 1120,
+      "kind": "config"
+    },
+    "webui/dist/mockServiceWorker.js": {
+      "sha256": "7b08c77ed5b9476614c91ce2c3df1493b5486c21ddaf71e412b64fb65504bf84",
+      "size": 9120,
+      "kind": "config"
+    },
+    "webui/docker-compose.yaml.template": {
+      "sha256": "6c6da869df01b2ff477b063bb399e8ede76d696af3b2be037e6af990aaca4690",
+      "size": 612,
+      "kind": "config"
+    },
+    "webui/nginx.conf": {
+      "sha256": "00fac1cc7dfc872b687d89d19b60a3dd2d08f61a38a57d9c74c12411208c78d5",
+      "size": 4894,
+      "kind": "config"
+    }
+  },
+  "symlinks": {
+    "cube-kernel-scf/vmlinux": "vmlinux-bm"
+  }
+}

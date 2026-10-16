@@ -1,0 +1,100 @@
+{
+  "release_version": "v0.7.1-arm64",
+  "built_at": "2026-09-11T09:58:19Z",
+  "built_by": "github-actions",
+  "git_commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+  "components": {
+    "cubemaster": {
+      "version": "v0.7.1",
+      "commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+      "build_time": "2026-09-11T09:58:19Z",
+      "digest_sha256": "sha256:2398ba285f612cb0e6cbfa5c0275488a1e655a34684065c06ea400182cfcdcb9"
+    },
+    "cubemastercli": {
+      "version": "v0.7.1",
+      "commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+      "build_time": "2026-09-11T09:58:19Z",
+      "digest_sha256": "sha256:d1408bef6d0818f05fc2e52dffc3cf724b7540bd94fc71b49608eaf14baee496"
+    },
+    "templatecenter": {
+      "version": "v0.7.1",
+      "commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+      "build_time": "2026-09-11T09:58:19Z",
+      "digest_sha256": "sha256:cfdab176aaa39f39352ce2c3eff98d5d7cab4837385a32f6363db835a94e8d65"
+    },
+    "cubelet": {
+      "version": "v0.7.1",
+      "commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+      "build_time": "2026-09-11T09:58:19Z",
+      "digest_sha256": "sha256:6814fadeec55e27227686367ab3ed957411ca926caabc63dd12121cbeb190dac"
+    },
+    "cubecli": {
+      "version": "v0.7.1",
+      "commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+      "build_time": "2026-09-11T09:58:19Z",
+      "digest_sha256": "sha256:74ef015fae4a67e50b7d6a7b7c349e7174f21270fdd0a35bcd0c20b32901c5ee"
+    },
+    "cube-api": {
+      "version": "v0.7.1",
+      "commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+      "build_time": "2026-09-11T09:58:19Z",
+      "digest_sha256": "sha256:6a84128504f7e1575d5d86e4f6da9953c794356b2875acae968344d94421d34a"
+    },
+    "cubeops": {
+      "version": "v0.7.1",
+      "commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+      "build_time": "2026-09-11T09:58:19Z",
+      "digest_sha256": "sha256:1385bc6aed3f0f6a3ee8059da5e500aeff7af4333191b6cb8bdac3110031cbab"
+    },
+    "cubeopscli": {
+      "version": "v0.7.1",
+      "commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+      "build_time": "2026-09-11T09:58:19Z",
+      "digest_sha256": "sha256:bcc7371d532f4fbbb46ea70099aa488b46ae24bd1fcb2d861ff350fb61727f0d"
+    },
+    "cube-agent": {
+      "version": "v0.7.1",
+      "commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+      "build_time": "2026-09-11T09:58:19Z",
+      "digest_sha256": "sha256:e82721f5577bf76103503dc88dcaf3250924ca79272f954e6694f6ec79d05230"
+    },
+    "containerd-shim-cube-rs": {
+      "version": "v0.7.1",
+      "commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+      "build_time": "2026-09-11T09:58:19Z",
+      "digest_sha256": "sha256:8d2b467e19c1f352b439798fa7776249d06a7db180c69c96b9be601355f98478"
+    },
+    "cube-runtime": {
+      "version": "v0.7.1",
+      "commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+      "build_time": "2026-09-11T09:58:19Z",
+      "digest_sha256": "sha256:10dced40e92c101f9b69b446f3bcc87f74850b6909c483506a419cd1604250f9"
+    },
+    "cube-egress": {
+      "version": "v0.7.1",
+      "commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+      "build_time": "2026-09-11T09:58:19Z"
+    },
+    "cube-lifecycle-manager": {
+      "version": "v0.7.1",
+      "commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+      "build_time": "2026-09-11T09:58:19Z"
+    },
+    "s3lvol": {
+      "version": "v0.7.1",
+      "commit": "31d911e430fdf8a8879bd062b8e78066c1a8e89d",
+      "build_time": "2026-09-11T09:58:19Z",
+      "digest_sha256": "sha256:cb0258a5584bdbdc7b7fe18fd725842009258f41af5cc8ead1819f08db0feda5"
+    }
+  },
+  "guest_image": {
+    "version": "guest-image-260820-1",
+    "digest_sha256": "sha256:acd5e1a2877c2d92047c1c1a81b8860f463632bcd35588ce31db8953bce843b7",
+    "base_image": "cube-sandbox-guest-image:one-click",
+    "agent_version": "v0.7.1"
+  },
+  "kernel": {
+    "version": "sha256-a63aa77e9c2d",
+    "vmlinux_digest_sha256": "sha256:a63aa77e9c2db5d3eb7feb8d1b002e0165693533574bce7468d28c3e235423df"
+  }
+}

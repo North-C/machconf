@@ -1,0 +1,4 @@
+release_version=v0.7.1-arm64
+git_commit=31d911e430fdf8a8879bd062b8e78066c1a8e89d
+built_at=2026-09-11T09:58:19Z
+manifest=release-manifest.json

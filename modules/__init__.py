@@ -12,20 +12,23 @@ from .base import (
 )
 from .bios import BiosModule
 from .cubesandbox import CubeSandboxModule
+from .cube_runtime import CubeRuntimeModule
 from .hardware import HardwareModule
 from .numa import NumaModule
 from .osconf import OsModule
+from .kvm_arm import KvmArmModule
+from .rcu import RcuModule
 
 # 本机模式的 host 标识
 LOCAL = "local"
 
 # 汇总表的展示顺序
-_ORDER = ["bios", "os", "numa", "hardware", "cube"]
+_ORDER = ["bios", "os", "numa", "hardware", "cube", "cube-runtime", "kvm-arm", "rcu"]
 
 
 def _build_registry():
     modules = [BiosModule(), OsModule(), NumaModule(), HardwareModule(),
-               CubeSandboxModule()]
+               CubeSandboxModule(), CubeRuntimeModule(), KvmArmModule(), RcuModule()]
     by_name = {m.name: m for m in modules}
     return by_name
 

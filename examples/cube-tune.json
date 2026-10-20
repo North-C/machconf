@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "services": [
+    {
+      "unit": "cube-sandbox-cubemaster.service",
+      "runtime": "go",
+      "go_env": {"GOMAXPROCS": "4", "GOGC": "100", "GOMEMLIMIT": "4GiB"},
+      "cpu_affinity": "0-3",
+      "numa_policy": "bind",
+      "numa_nodes": "0",
+      "restart": false
+    },
+    {
+      "unit": "cube-sandbox-cubelet.service",
+      "runtime": "go",
+      "go_env": {"GOMAXPROCS": "4", "GOGC": "100"},
+      "restart": false
+    },
+    {
+      "unit": "cube-sandbox-cube-api.service",
+      "runtime": "rust",
+      "cpu_affinity": "0-7",
+      "numa_policy": "bind",
+      "numa_nodes": "0",
+      "restart": false
+    }
+  ],
+  "containers": [
+    {"name": "cube-proxy", "cpuset_cpus": "0-7", "cpuset_mems": "0"}
+  ]
+}

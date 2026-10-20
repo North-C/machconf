@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "rcu": {
+    "rcu_expedited": 0,
+    "rcu_normal": 0
+  }
+}

@@ -35,6 +35,10 @@ sudo python3 machconf.py --local -m cube --cube-root /opt/cubetoolbox
 # 多台汇总
 python3 machconf.py -H 192.0.2.10,192.0.2.11
 
+# 两台机器并排对比，支持只看差异
+python3 machconf.py -H 192.0.2.10,192.0.2.11 --compare
+python3 machconf.py -H 192.0.2.10,192.0.2.11 --compare --diff-only -m numa,rcu,cube-runtime
+
 # 输出格式: table (默认) / json / markdown / csv / csv-wide
 python3 machconf.py -H 192.0.2.10 -f markdown > report.md
 python3 machconf.py -H 192.0.2.10 -f csv > report.csv           # CSV 长表 (Excel/pandas)
@@ -44,6 +48,64 @@ python3 machconf.py -H 192.0.2.10,192.0.2.11 -f csv-wide > compare.csv  # 宽表
 sudo python3 machconf.py --local --set-numa 0
 python3 machconf.py -H 192.0.2.10 --set-numa 0
 ```
+
+## 两台机器配置对比
+
+支持在线采集后对比，或读取两份已有的 JSON 报告离线对比。两种方式均为只读，
+输出列为 **模块 / 配置项 / 左机器值 / 右机器值 / 结果**。
+默认采集全部模块并保留相同项，展示顺序为 **硬件 → BIOS → OS → NUMA → RCU →
+KVM ARM → Cube 组件 → Cube 运行资源**；离线报告中的其他模块追加到末尾。
+
+```bash
+# 在线：必须指定两台不同机器，左右顺序与 -H 一致
+python3 machconf.py --compare -H 192.0.2.10,192.0.2.11 -f markdown > comparison-full.md
+python3 machconf.py --compare -H 192.0.2.10,192.0.2.11 -m numa,rcu,cube-runtime
+python3 machconf.py --compare -H 192.0.2.10,192.0.2.11 -m bios,os,numa,hardware \
+  --diff-only -f markdown > comparison.md
+
+# 分别采集并保存；每份文件仅包含一台机器
+python3 machconf.py -H 192.0.2.10 -f json > machine-a.json
+python3 machconf.py -H 192.0.2.11 -f json > machine-b.json
+
+# 离线：不连接 SSH，可以比较本机与远程机保存的报告
+python3 machconf.py --compare-files machine-a.json machine-b.json
+python3 machconf.py --compare-files machine-a.json machine-b.json --diff-only -f markdown > comparison.md
+python3 machconf.py --compare-files machine-a.json machine-b.json -f csv > comparison.csv
+python3 machconf.py --compare-files machine-a.json machine-b.json -m rcu,numa -f json > comparison.json
+```
+
+`--compare-files` 接受主工具 `machconf.py -f json` 的输出，不接受 `cube_runtime.py` 的独立 JSON
+结构或已生成的 comparison JSON。若只关注 Cube 资源，保存时用 `machconf.py -m cube-runtime -f json`。
+本机报告用 `machconf.py --local -f json` 获取。文件中的主机名可相同，用于比较同机不同时间的快照；
+表格明确标识左右两侧。
+
+| 结果 | 含义 |
+| --- | --- |
+| 相同 | 两侧采集值相同且可判定 |
+| 不同 | 两侧均有可判定的值，但值不同 |
+| 仅左侧 / 仅右侧 | 另一份报告没有该项；不等于该机器没有此配置 |
+| 不可判定 | 至少一侧为不可用、权限不足、未观测到、脱敏值或不完整读取结果等 |
+| 多项歧义 | 同侧同一模块内出现重复配置项，保留全部证据，不猜测配对或覆盖 |
+
+对比按 **模块名 + 配置项名称** 对齐，不混淆不同模块的同名项。Cube 资源进程项的 `pid=数字`
+在匹配时归一为 `pid=*`，原始条目仍保留；同组件多个进程造成重名时显示“多项歧义”。
+Cube 资源采集时间和正常进程扫描状态不参与配置对比；异常扫描仍保留。
+
+比较以 `value` 为准，`note` 是来源/诊断上下文，不参与判等，完整保留在对比 JSON 中。
+字典形式的 JSON 值不受字段顺序影响；普通字符串、单位、数组顺序、线程数量和其他路径保持原样，
+不自动推断单位换算、默认值或组件实例映射。因此“相同”是采集值相同，不代表完整机器状态一致。
+`N.A.` 等不可用值即使两边相同也不会判为“相同”。
+
+`--diff-only` 只隐藏“相同”，不会隐藏缺项、不可判定或歧义。
+终端表格与 Markdown 显示完整状态汇总；JSON 保留全量汇总及展示条目数；
+CSV 是带 UTF-8 BOM 的矩形对比表（对比模式下 `csv-wide` 与 `csv` 相同）。
+长表格值完整折行，不截断；普通多机报告和原有 `csv-wide` 用法保持兼容。
+Markdown 单元格使用行内代码保留配置原文，方括号、下划线等不转换成 HTML 实体；
+仅表格分隔符 `|` 使用反斜杠转义，多行值使用 `<br>` 换行。
+
+在线模式任一主机采集失败则退出 1，不生成缺少一侧的成功对比。
+报告格式错误、所选模块没有可对比项等也退出 1；成功生成对比退出 0，存在差异本身不算执行失败。
+对比选项不能与 NUMA/THP/HugeTLB/KVM 修改选项混用。
 
 ## 模块
 

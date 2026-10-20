@@ -23,7 +23,7 @@ from .rcu import RcuModule
 LOCAL = "local"
 
 # 汇总表的展示顺序
-_ORDER = ["bios", "os", "numa", "hardware", "cube", "cube-runtime", "kvm-arm", "rcu"]
+_ORDER = ["hardware", "bios", "os", "numa", "rcu", "kvm-arm", "cube", "cube-runtime"]
 
 
 def _build_registry():

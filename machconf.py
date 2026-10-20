@@ -35,6 +35,8 @@ from modules.memory_controls import (
     THP_MODES, clear_hugepages_command, parse_change_output, set_thp_command,
 )
 from modules.kvm_arm_boot import BootError, normalize_settings
+from modules.compare import load_report, compare_reports
+from modules.compare_render import render_comparison
 
 SET_NUMA_CMD = "echo %s > /proc/sys/kernel/numa_balancing && cat /proc/sys/kernel/numa_balancing"
 
@@ -136,6 +138,35 @@ RENDERERS = {"table": render_table, "json": render_json, "markdown": render_mark
              "csv": render_csv, "csv-wide": render_csv_wide}
 
 
+def selected_modules(value):
+    if value == "all":
+        return set(MODULE_ORDER)
+    selected = {m.strip() for m in value.split(",") if m.strip()}
+    unknown = selected - set(MODULES)
+    if unknown:
+        raise ValueError("未知模块: %s (可选: %s)" % (",".join(sorted(unknown)), ",".join(MODULE_ORDER)))
+    if not selected:
+        raise ValueError("模块列表不能为空")
+    return selected
+
+
+def output_comparison(left, right, selected, output_format, diff_only):
+    left_host, left_data = left
+    right_host, right_data = right
+    left_data = {key: value for key, value in left_data.items() if key in selected}
+    right_data = {key: value for key, value in right_data.items() if key in selected}
+    report = compare_reports(left_host, left_data, right_host, right_data)
+    if not report["rows"]:
+        raise ValueError("所选模块没有可对比的采集项，请检查报告内容与 -m 选项")
+    print(render_comparison(report, format=output_format, diff_only=diff_only))
+
+
+def comparison_snapshot(host_result):
+    host, modules = host_result
+    return host, {mod.name: [{"key": item.key, "value": item.value, "note": item.note}
+                             for item in items] for mod, items in modules}
+
+
 def set_numa(hosts, value, ask_pass=False):
     """修改 numa_balancing (远端 SSH 或本机) 并回显新值."""
     ok = True
@@ -232,8 +263,34 @@ def main(argv=None):
     parser.add_argument("--dry-run", action="store_true",
                         help="仅预览 --set-kvm-arm 的修改，不写文件")
     parser.add_argument("--list-modules", action="store_true", help="列出可用模块")
+    comparison = parser.add_mutually_exclusive_group()
+    comparison.add_argument("--compare", action="store_true",
+                            help="只读采集 -H 指定的两台不同机器并生成配置对比表")
+    comparison.add_argument("--compare-files", nargs=2, metavar=("LEFT.json", "RIGHT.json"),
+                            help="离线对比两份 machconf -f json 报告，每份须恰好包含一台机器")
+    parser.add_argument("--diff-only", action="store_true",
+                        help="对比模式中隐藏相同项，仍显示缺项/不可判定/歧义")
     args = parser.parse_args(argv)
 
+    comparing = args.compare or args.compare_files is not None
+    if args.diff_only and not comparing:
+        parser.error("--diff-only 仅用于 --compare 或 --compare-files")
+    if comparing and (args.set_numa is not None or args.set_thp or args.clear_hugepages or
+                      args.set_kvm_arm or args.dry_run or args.list_modules):
+        parser.error("配置对比为只读操作，不能与修改、--dry-run 或 --list-modules 组合")
+    if args.compare_files:
+        if args.hosts or args.local or args.ask_pass or args.cube_root:
+            parser.error("--compare-files 为离线模式，不能与主机/认证/--cube-root 参数组合")
+        try:
+            selected = selected_modules(args.modules)
+            left, right = (load_report(path) for path in args.compare_files)
+            output_comparison(left, right, selected, args.format, args.diff_only)
+        except (OSError, ValueError) as exc:
+            print("对比失败: %s" % exc, file=sys.stderr)
+            return 1
+        return 0
+    if args.compare and args.local:
+        parser.error("--compare 需要 -H 指定两台不同机器；本机报告请保存 JSON 后用 --compare-files")
     if args.dry_run and not args.set_kvm_arm:
         parser.error("--dry-run 仅用于 --set-kvm-arm")
     if args.set_kvm_arm and (args.set_numa or args.set_thp or args.clear_hugepages or args.list_modules):
@@ -260,6 +317,8 @@ def main(argv=None):
         [h.strip() for h in args.hosts.split(",") if h.strip()]
     if not hosts:
         parser.error("目标主机列表不能为空")
+    if args.compare and (len(hosts) != 2 or hosts[0] == hosts[1]):
+        parser.error("--compare 需要恰好两台不同机器，如 -H host-a,host-b")
     if boot_settings:
         return change_kvm_arm(hosts, boot_settings, args.dry_run, args.ask_pass)
     if args.set_numa and (args.clear_hugepages or args.set_thp):
@@ -269,14 +328,10 @@ def main(argv=None):
     if args.set_numa:
         return set_numa(hosts, args.set_numa, ask_pass=args.ask_pass)
 
-    if args.modules == "all":
-        selected = set(MODULE_ORDER)
-    else:
-        selected = {m.strip() for m in args.modules.split(",") if m.strip()}
-        unknown = selected - set(MODULES)
-        if unknown:
-            parser.error("未知模块: %s (可选: %s)" % (",".join(sorted(unknown)),
-                                                     ",".join(MODULE_ORDER)))
+    try:
+        selected = selected_modules(args.modules)
+    except ValueError as exc:
+        parser.error(str(exc))
 
     host_results, failed = [], []
     for host in hosts:
@@ -288,6 +343,17 @@ def main(argv=None):
             failed.append(display_host(host))
     if not host_results:
         return 1
+    if args.compare:
+        if failed:
+            print("对比失败：必须成功采集两台机器；失败主机: %s" % ",".join(failed), file=sys.stderr)
+            return 1
+        try:
+            output_comparison(comparison_snapshot(host_results[0]),
+                              comparison_snapshot(host_results[1]), selected, args.format, args.diff_only)
+        except ValueError as exc:
+            print("对比失败: %s" % exc, file=sys.stderr)
+            return 1
+        return 0
     print(RENDERERS[args.format](host_results))
     if failed:
         print("失败主机: %s" % ",".join(failed), file=sys.stderr)

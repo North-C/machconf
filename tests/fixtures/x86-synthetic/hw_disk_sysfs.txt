@@ -1,0 +1,1 @@
+# No disk sysfs inventory in this historical fixture.

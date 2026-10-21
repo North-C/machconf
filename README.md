@@ -114,7 +114,7 @@ Markdown 单元格使用行内代码保留配置原文，方括号、下划线�
 | `bios` | BIOS 固件/整机型号、CPU 核心×路×线程 (SMT)、NUMA 节点及各节点 CPU 分布、governor/C-state/EPB (功耗)、睿频/超频 | dmidecode, lscpu, cpufreq sysfs |
 | `os` | 发行版/内核版本、静态大页 (容量/空闲/各 NUMA 节点分布)、透明大页 THP | /proc/meminfo, /sys/devices/system/node |
 | `numa` | `kernel.numa_balancing` 运行时开关、内核启动参数覆盖、sysctl 持久化配置 | /proc/sys, /proc/cmdline, sysctl.conf |
-| `hardware` | 内存容量/类型/频率 (实配与标称)、磁盘大小/类型 (NVMe/SSD/HDD)/角色 (系统盘/数据盘/未挂载) | dmidecode, lsblk |
+| `hardware` | 内存容量/类型/频率 (实配与标称)、磁盘大小/类型 (NVMe/SSD/HDD)/角色 (系统盘/数据盘/未挂载)、逐盘型号/产品系列与代际/固件/NVMe 协议/PCIe 能力与当前链路 | dmidecode, lsblk, nvme-cli, sysfs |
 | `cube` | CubeSandbox 各组件文件、运行进程、容器镜像与社区 v0.7.1 离线包是否一致 | sha256sum, /proc/\<pid\>/exe, docker |
 | `cube-runtime` | CubeMaster / Cubelet / CubeAPI 的 Go/worker 参数、CPU/NUMA、内存、文件句柄和并发资源配置 | systemctl, /proc, cgroup 文件系统 |
 | `rcu` | RCU expedited / normal 运行值、normal_after_boot、cmdline 及内核配置证据 | sysfs, /proc/cmdline, /proc/config.gz 或 /boot/config-* |
@@ -132,6 +132,80 @@ Markdown 单元格使用行内代码保留配置原文，方括号、下划线�
   推断 (标注"推断")。
 - 磁盘角色按挂载点判别, 逐盘 `lsblk` 聚合含 LVM 子设备的挂载点, 系统盘 = 挂载了
   `/`、`/boot` 或 swap 的盘, 其余已挂载盘为数据盘。
+- 磁盘类型同时输出为独立项 `磁盘 nvme0n1 Disk Type`，可在 JSON、Markdown、CSV
+  和双机对比中单独查看。依据 `lsblk` 的 `ROTA`、`TRAN` 判别为 NVMe SSD、
+  SATA/SAS SSD 或 HDD 等，说明列保留判别依据；RAID/虚拟设备可能隐藏底层介质类型。
+
+### NVMe 协议版本
+
+`hardware` 模块新增 `磁盘 nvme0n1 NVMe 协议版本` 等逐盘配置项，自动进入
+全部输出格式以及双机对比。只读执行 `nvme id-ctrl /dev/<namespace> -o json`，
+将 Identify Controller 的 `ver` 解码为 `主版本.次版本[.修订号]`，例如 `1.4`、`2.0`、`1.4.1`；
+说明列保留查询来源及原始十六进制 VER。该值是控制器报告的 NVMe 协议版本，
+不代表 PCIe 代际、固件版本或 nvme-cli 软件版本；多路径设备反映本次命令返回的控制器信息。
+
+目标机器需要 `nvme-cli` 和 GNU `timeout`，建议使用 root 采集；不自动安装依赖。
+每次查询最多 3 秒（超时后最多再等待 1 秒终止），总查询预算 10 秒。
+缺少工具、权限/设备读取失败、超时、VER 缺失或为 0 时输出 `N.A.` 并保留原因，
+不会推测版本。非 NVMe 磁盘不生成此项。历史快照不自动补写，需重新采集才能取得该字段。
+
+```bash
+python3 machconf.py -H 192.168.25.90 -m hardware -f markdown
+python3 machconf.py -H 192.168.25.90 -m all -f json > machine-90.json
+```
+
+字段与编码依据：[nvme-cli Identify Controller 文档](https://github.com/linux-nvme/nvme-cli/blob/v2.11/Documentation/nvme-id-ctrl.1)、
+[JSON VER 输出](https://github.com/linux-nvme/nvme-cli/blob/v2.11/nvme-print-json.c)、
+[Linux NVMe 版本编码](https://github.com/torvalds/linux/blob/v6.6/include/linux/nvme.h)。
+
+### 磁盘身份、产品代际与 PCIe
+
+以下独立配置项自动进入 `-m hardware`、`-m all` 以及双机对比：
+
+| 配置项（每项均带 `磁盘 <设备名>` 前缀） | 来源与含义 |
+| --- | --- |
+| `Disk Type` | lsblk 的 ROTA/TRAN；保留判别依据，未知接口不推测为 SATA/SAS |
+| `型号` | NVMe Identify Controller 的 mn，回退控制器 sysfs model、lsblk MODEL |
+| `产品系列` / `产品代际` | 本地 `refs/disk-models.json` 对完整型号的精确映射，说明中记录证据来源 |
+| `固件版本` | Identify Controller 的 fr，回退控制器 sysfs firmware_rev、lsblk REV |
+| `NVMe 协议版本` | Identify Controller 的 VER；仅适用于 NVMe |
+| `PCIe 最大能力` | 磁盘控制器 PCIe 端点的 max_link_speed / max_link_width |
+| `PCIe 当前链路` | 同一端点的 current_link_speed / current_link_width，采集时的瞬时状态 |
+
+PCIe 项同时保存代际、通道数和 GT/s，例如 `PCIe 5.0 ×4 (32 GT/s)`，说明保留
+端点地址、sysfs 来源和原始值。最大能力是该设备端点的能力，不代表整个路径的能力；
+当前链路也不等同于实测吞吐。sysfs 映射必须能确定命名空间对应的控制器及 PCIe 端点，
+不会根据 nvme 编号猜控制器，也不会把上游 PCIe 桥或 HBA 的链路当作磁盘链路。
+多路径映射不明确、接口缺失或无权限时输出 `N.A.`；NVMe-oF 明确为非本地 PCIe 时
+输出 `not_applicable`。sysfs 采集无需 nvme-cli，型号和固件可独立回退读取。
+
+产品代际不是标准 NVMe 协议字段。映射表随工具在本地读取，不依赖远端安装或在线检索。
+默认只包含厂商规格明确列出的完整产品名（如 `ES3600P V7`）；
+`HWE…` 等编码型号没有已确认映射时，系列和代际均保留 `N.A.`。
+**不能根据型号里的数字 7、NVMe 2.0 或 PCIe 5.0 推断为 V7。**
+
+在 `refs/disk-models.json` 的 `models` 中添加完整型号键即可扩展，例如以下结构
+（占位内容必须替换为已核对的信息）：
+
+```json
+{
+  "schema_version": 1,
+  "models": {
+    "设备实际返回的完整型号": {
+      "series": "厂商确认的产品系列",
+      "generation": "厂商确认的代际",
+      "source": "厂商资料 URL 或已核实的资产清单来源"
+    }
+  }
+}
+```
+
+匹配只去除设备字段首尾空白，保持大小写，不使用前缀/通配符；
+缺失来源、重复型号键或无效配置会在说明中显示错误，并使映射结果保持未知。
+历史已保存快照不会被新映射自动改写，重新采集时才应用本地映射。
+
+依据：[华为 SSD 产品规格](https://e.huawei.com/cn/products/computing/kunpeng/components/nvmessd)、
+[Linux PCIe sysfs 实现](https://github.com/torvalds/linux/blob/v6.6/drivers/pci/pci-sysfs.c)。
 
 ## CubeSandbox 组件对比 (cube 模块)
 

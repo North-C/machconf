@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "models": {
+    "ES3500P V6": {
+      "series": "ES3500P",
+      "generation": "V6",
+      "source": "https://e.huawei.com/cn/products/computing/kunpeng/components/nvmessd"
+    },
+    "ES3500P V7": {
+      "series": "ES3500P",
+      "generation": "V7",
+      "source": "https://e.huawei.com/cn/products/computing/kunpeng/components/nvmessd"
+    },
+    "ES3600P V6": {
+      "series": "ES3600P",
+      "generation": "V6",
+      "source": "https://e.huawei.com/cn/products/computing/kunpeng/components/nvmessd"
+    },
+    "ES3600P V7": {
+      "series": "ES3600P",
+      "generation": "V7",
+      "source": "https://e.huawei.com/cn/products/computing/kunpeng/components/nvmessd"
+    }
+  }
+}

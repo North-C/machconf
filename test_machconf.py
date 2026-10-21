@@ -159,6 +159,10 @@ class HardwareTests(unittest.TestCase):
         self.assertIn("HDD (机械盘)", items["磁盘 sda"].value)
         self.assertIn("SATA/SAS SSD", items["磁盘 sdb"].value)
         self.assertIn("NVMe SSD", items["磁盘 nvme0n1"].value)
+        self.assertEqual(items["磁盘 nvme0n1 Disk Type"].value, "NVMe SSD")
+        self.assertEqual(items["磁盘 sda Disk Type"].value, "HDD (机械盘)")
+        self.assertEqual(items["磁盘 sdb Disk Type"].value, "SATA/SAS SSD")
+        self.assertIn("ROTA=0, TRAN=nvme", items["磁盘 nvme0n1 Disk Type"].note)
         self.assertIn("系统盘", items["磁盘 sda"].value)
         self.assertIn("数据盘", items["磁盘 sdb"].value)
 

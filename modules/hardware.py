@@ -1,8 +1,93 @@
 """硬件配置检测: 内存 (容量/通道/类型/频率)、磁盘 (大小/类型/角色: 系统盘/数据盘)."""
 
+import json
 import re
 
 from .base import Item, Module, first_group
+from .disk_inventory import DISK_SYSFS_PROBE, disk_inventory, read_disks
+
+
+# Read Identify Controller via each namespace (also works for multipath names).
+# Bound each command and the total budget so a stalled disk cannot block all probes.
+NVME_VERSION_PROBE = r'''
+nvme_probe_start=$SECONDS
+for nvme_path in /sys/block/nvme*n*; do
+    [ -e "$nvme_path" ] || continue
+    nvme_disk=${nvme_path##*/}
+    [[ "$nvme_disk" =~ ^nvme[0-9]+(c[0-9]+)?n[0-9]+$ ]] || continue
+    if ! command -v nvme >/dev/null 2>&1; then
+        printf '%s|missing_nvme|\n' "$nvme_disk"
+        continue
+    fi
+    if ! command -v timeout >/dev/null 2>&1; then
+        printf '%s|missing_timeout|\n' "$nvme_disk"
+        continue
+    fi
+    nvme_remaining=$((10 - SECONDS + nvme_probe_start))
+    if [ "$nvme_remaining" -le 0 ]; then
+        printf '%s|budget_exhausted|\n' "$nvme_disk"
+        continue
+    fi
+    [ "$nvme_remaining" -le 3 ] || nvme_remaining=3
+    nvme_output=$(LC_ALL=C timeout -k 1s "${nvme_remaining}s" nvme id-ctrl "/dev/$nvme_disk" -o json 2>/dev/null)
+    nvme_rc=$?
+    if [ "$nvme_rc" -eq 0 ]; then
+        printf '%s|ok|' "$nvme_disk"
+        printf '%s' "$nvme_output" | tr '\n\r' '  '
+        printf '\n'
+    elif [ "$nvme_rc" -eq 124 ] || [ "$nvme_rc" -eq 137 ]; then
+        printf '%s|timeout|\n' "$nvme_disk"
+    else
+        printf '%s|read_error|%s\n' "$nvme_disk" "$nvme_rc"
+    fi
+done
+'''
+
+
+def parse_nvme_versions(text, disk_items=()):
+    """Decode the controller's 32-bit VER; never infer it from firmware or PCIe."""
+    name_pattern = r"nvme[0-9]+(?:c[0-9]+)?n[0-9]+"
+    records = {}
+    for line in text.splitlines():
+        fields = line.split("|", 2)
+        if len(fields) == 3 and re.fullmatch(name_pattern, fields[0]):
+            records[fields[0]] = fields[1:]
+    for item in disk_items:
+        match = re.fullmatch(r"磁盘 (" + name_pattern + r")", item.key)
+        if match:
+            records.setdefault(match[1], ("not_observed", ""))
+    reasons = {
+        "missing_nvme": "未安装 nvme-cli（nvme 命令不可用）",
+        "missing_timeout": "timeout 命令不可用，跳过未受超时保护的查询",
+        "timeout": "Identify Controller 查询超时",
+        "budget_exhausted": "NVMe 查询总时间预算耗尽，未查询此设备",
+        "read_error": "Identify Controller 读取失败（权限、设备状态或命令支持问题）",
+        "not_observed": "未采集到该盘的 NVMe 版本探测结果",
+    }
+    items = []
+    for name, (status, payload) in sorted(records.items()):
+        value = "N.A."
+        source = "nvme id-ctrl /dev/%s -o json; Identify Controller VER" % name
+        if status == "ok":
+            try:
+                data = json.loads(payload)
+                version = data.get("ver") if isinstance(data, dict) else None
+                if isinstance(version, str) and re.fullmatch(r"0[xX][0-9a-fA-F]+|[0-9]+", version):
+                    version = int(version, 16 if version.lower().startswith("0x") else 10)
+                if type(version) is not int or not 0x10000 <= version < 0xffffffff:
+                    raise ValueError("invalid VER")
+                value = "%d.%d" % (version >> 16, (version >> 8) & 0xff)
+                if version & 0xff:
+                    value += ".%d" % (version & 0xff)
+                note = "%s=0x%08x（控制器报告的协议版本）" % (source, version)
+            except (ValueError, TypeError):
+                note = source + "; JSON/VER 缺失、为 0 或无效，无法判定协议版本"
+        else:
+            note = source + "; " + reasons.get(status, "未知探测状态")
+            if status == "read_error" and payload.isdigit():
+                note += "; exit=" + payload
+        items.append(Item("磁盘 %s NVMe 协议版本" % name, value, note))
+    return items
 
 
 def _fmt_size(size_str):
@@ -17,7 +102,9 @@ def _classify_disk(rota, tran):
     if rota == "1":
         return "HDD (机械盘)"
     if rota == "0":
-        return "SATA/SAS SSD"
+        if tran in ("sata", "sas", "ata"):
+            return "SATA/SAS SSD"
+        return "非旋转设备 (%s)" % (tran or "接口未知")
     return tran or "未知"
 
 
@@ -94,28 +181,25 @@ def parse_disks(lsblk_text, mounts_text):
     disk_mounts = parse_mounts(mounts_text)
 
     items = []
-    disks = []
-    for line in lsblk_text.splitlines():
-        parts = line.split()
-        # NAME SIZE ROTA TRAN MODEL TYPE (TYPE 固定在最后)
-        if len(parts) < 6 or parts[-1] != "disk":
-            continue
-        name, size, rota, tran = parts[0], parts[1], parts[2], parts[3]
-        model = " ".join(parts[4:-1])
-        if name.startswith(("nbd", "loop", "ram", "zram", "sr")):
-            continue
-        disks.append((name, size, rota, tran, model))
+    disks = read_disks(lsblk_text)
 
     if not disks:
         return [Item("磁盘", "N.A.", "lsblk 未返回任何物理盘")]
 
-    for name, size, rota, tran, model in disks:
+    for disk in disks:
+        name, size, rota, tran, model = (disk[k] for k in ("name", "size", "rota", "tran", "model"))
         role, mount_note = _disk_role(disk_mounts.get(name, []))
+        disk_type = _classify_disk(rota, tran)
         items.append(Item(
             "磁盘 %s" % name,
-            "%s | %s | %s%s" % (_fmt_size(size), _classify_disk(rota, tran),
+            "%s | %s | %s%s" % (_fmt_size(size), disk_type,
                                 role, (" | " + model) if model else ""),
             mount_note,
+        ))
+        items.append(Item(
+            "磁盘 %s Disk Type" % name, disk_type,
+            "依据 lsblk ROTA=%s, TRAN=%s 判别；RAID/虚拟设备可能隐藏底层介质类型"
+            % (rota, tran),
         ))
 
     data = [it for it in items if "| 数据盘" in it.value]
@@ -150,12 +234,19 @@ class HardwareModule(Module):
              "dmidecode -t memory 2>/dev/null"
              " | grep -E '^[[:space:]]+(Size|Type|Speed|Configured Memory Speed):' || true"),
             ("hw_lsblk",
+             "lsblk -d -J -o NAME,SIZE,ROTA,TRAN,MODEL,TYPE,REV 2>/dev/null || "
              "lsblk -d -n -o NAME,SIZE,ROTA,TRAN,MODEL,TYPE 2>/dev/null || true"),
             ("hw_disk_mounts", disk_mounts),
+            ("hw_nvme_versions", NVME_VERSION_PROBE),
+            ("hw_disk_sysfs", DISK_SYSFS_PROBE),
         ]
 
     def parse(self, sections):
+        disks = parse_disks(sections.get("hw_lsblk", ""),
+                            sections.get("hw_disk_mounts", ""))
         return (parse_memory(sections.get("hw_dmi_mem", ""),
                              sections.get("hw_meminfo", ""))
-                + parse_disks(sections.get("hw_lsblk", ""),
-                              sections.get("hw_disk_mounts", "")))
+                + disks + parse_nvme_versions(sections.get("hw_nvme_versions", ""), disks)
+                + disk_inventory(read_disks(sections.get("hw_lsblk", "")),
+                                 sections.get("hw_disk_sysfs", ""),
+                                 sections.get("hw_nvme_versions", "")))
